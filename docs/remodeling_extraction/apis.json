@@ -1,0 +1,1374 @@
+{
+  "api_endpoints_by_module": {
+    "InvenTree": [
+      {
+        "route": "/api/admin/",
+        "target": "include(common.api.admin_api_urls)",
+        "name": ""
+      },
+      {
+        "route": "/api/search/",
+        "target": "APISearchView",
+        "name": "api-search"
+      },
+      {
+        "route": "/api/generate/batch-code/",
+        "target": "stock.api.GenerateBatchCode",
+        "name": "api-generate-batch-code"
+      },
+      {
+        "route": "/api/generate/serial-number/",
+        "target": "stock.api.GenerateSerialNumber",
+        "name": "api-generate-serial-number"
+      },
+      {
+        "route": "/api/schema/",
+        "target": "SpectacularAPIView",
+        "name": "schema"
+      },
+      {
+        "route": "/api/license/",
+        "target": "LicenseView",
+        "name": "api-license"
+      },
+      {
+        "route": "/api/version-text",
+        "target": "VersionTextView",
+        "name": "api-version-text"
+      },
+      {
+        "route": "/api/version/",
+        "target": "VersionView",
+        "name": "api-version"
+      },
+      {
+        "route": "/api/",
+        "target": "InfoView",
+        "name": "api-inventree-info"
+      },
+      {
+        "route": "/api/auth/login-redirect/",
+        "target": "users.api.LoginRedirect",
+        "name": "api-login-redirect"
+      },
+      {
+        "route": "/api/auth/",
+        "target": "allauth headless client",
+        "name": ""
+      },
+      {
+        "route": "/api/email/generate/",
+        "target": "",
+        "name": "sesame-generate"
+      },
+      {
+        "route": "/api/email/login/",
+        "target": "LoginView",
+        "name": "sesame-login"
+      },
+      {
+        "route": "/api/^.*$",
+        "target": "NotFoundView",
+        "name": "api-404"
+      }
+    ],
+    "part": [
+      {
+        "route": "/api/bom/substitute/<int:pk>/",
+        "target": "BomItemSubstituteDetail",
+        "name": "api-bom-substitute-detail"
+      },
+      {
+        "route": "/api/bom/substitute/",
+        "target": "BomItemSubstituteList",
+        "name": "api-bom-substitute-list"
+      },
+      {
+        "route": "/api/bom/<int:pk>/validate/",
+        "target": "BomItemValidate",
+        "name": "api-bom-item-validate"
+      },
+      {
+        "route": "/api/bom/<int:pk>/",
+        "target": "BomDetail",
+        "name": "api-bom-item-detail"
+      },
+      {
+        "route": "/api/bom/",
+        "target": "BomList",
+        "name": "api-bom-list"
+      },
+      {
+        "route": "/api/part/category/tree/",
+        "target": "CategoryTree",
+        "name": "api-part-category-tree"
+      },
+      {
+        "route": "/api/part/category/parameters/<int:pk>/",
+        "target": "CategoryParameterDetail",
+        "name": "api-part-category-parameter-detail"
+      },
+      {
+        "route": "/api/part/category/parameters/",
+        "target": "CategoryParameterList",
+        "name": "api-part-category-parameter-list"
+      },
+      {
+        "route": "/api/part/category/<int:pk>/",
+        "target": "CategoryDetail",
+        "name": "api-part-category-detail"
+      },
+      {
+        "route": "/api/part/category/",
+        "target": "CategoryList",
+        "name": "api-part-category-list"
+      },
+      {
+        "route": "/api/part/test-template/<int:pk>/",
+        "target": "PartTestTemplateDetail",
+        "name": "api-part-test-template-detail"
+      },
+      {
+        "route": "/api/part/test-template/",
+        "target": "PartTestTemplateList",
+        "name": "api-part-test-template-list"
+      },
+      {
+        "route": "/api/part/sale-price/<int:pk>/",
+        "target": "PartSalePriceDetail",
+        "name": "api-part-sale-price-detail"
+      },
+      {
+        "route": "/api/part/sale-price/",
+        "target": "PartSalePriceList",
+        "name": "api-part-sale-price-list"
+      },
+      {
+        "route": "/api/part/internal-price/<int:pk>/",
+        "target": "PartInternalPriceDetail",
+        "name": "api-part-internal-price-detail"
+      },
+      {
+        "route": "/api/part/internal-price/",
+        "target": "PartInternalPriceList",
+        "name": "api-part-internal-price-list"
+      },
+      {
+        "route": "/api/part/related/<int:pk>/",
+        "target": "PartRelatedDetail",
+        "name": "api-part-related-detail"
+      },
+      {
+        "route": "/api/part/related/",
+        "target": "PartRelatedList",
+        "name": "api-part-related-list"
+      },
+      {
+        "route": "/api/part/stocktake/<int:pk>/",
+        "target": "PartStocktakeDetail",
+        "name": "api-part-stocktake-detail"
+      },
+      {
+        "route": "/api/part/stocktake/generate/",
+        "target": "PartStocktakeGenerate",
+        "name": "api-part-stocktake-generate"
+      },
+      {
+        "route": "/api/part/stocktake/",
+        "target": "PartStocktakeList",
+        "name": "api-part-stocktake-list"
+      },
+      {
+        "route": "/api/part/thumbs/",
+        "target": "PartThumbs",
+        "name": "api-part-thumbs"
+      },
+      {
+        "route": "/api/part/thumbs/<int:pk>/",
+        "target": "PartThumbsUpdate",
+        "name": "api-part-thumbs-update"
+      },
+      {
+        "route": "/api/part/<int:pk>/serial-numbers/",
+        "target": "PartSerialNumberDetail",
+        "name": "api-part-serial-number-detail"
+      },
+      {
+        "route": "/api/part/<int:pk>/requirements/",
+        "target": "PartRequirements",
+        "name": "api-part-requirements"
+      },
+      {
+        "route": "/api/part/<int:pk>/bom-copy/",
+        "target": "PartCopyBOM",
+        "name": "api-part-bom-copy"
+      },
+      {
+        "route": "/api/part/<int:pk>/bom-validate/",
+        "target": "PartValidateBOM",
+        "name": "api-part-bom-validate"
+      },
+      {
+        "route": "/api/part/<int:pk>/pricing/",
+        "target": "PartPricingDetail",
+        "name": "api-part-pricing"
+      },
+      {
+        "route": "/api/part/<int:pk>/",
+        "target": "PartDetail",
+        "name": "api-part-detail"
+      },
+      {
+        "route": "/api/part/",
+        "target": "PartList",
+        "name": "api-part-list"
+      }
+    ],
+    "build": [
+      {
+        "route": "/api/build/line/<int:pk>/",
+        "target": "BuildLineDetail",
+        "name": "api-build-line-detail"
+      },
+      {
+        "route": "/api/build/line/",
+        "target": "BuildLineList",
+        "name": "api-build-line-list"
+      },
+      {
+        "route": "/api/build/item/<int:pk>/",
+        "target": "BuildItemDetail",
+        "name": "api-build-item-detail"
+      },
+      {
+        "route": "/api/build/item/",
+        "target": "BuildItemList",
+        "name": "api-build-item-list"
+      },
+      {
+        "route": "/api/build/<int:pk>/allocate/",
+        "target": "BuildAllocate",
+        "name": "api-build-allocate"
+      },
+      {
+        "route": "/api/build/<int:pk>/consume/",
+        "target": "BuildConsume",
+        "name": "api-build-consume"
+      },
+      {
+        "route": "/api/build/<int:pk>/auto-allocate/",
+        "target": "BuildAutoAllocate",
+        "name": "api-build-auto-allocate"
+      },
+      {
+        "route": "/api/build/<int:pk>/complete/",
+        "target": "BuildOutputComplete",
+        "name": "api-build-output-complete"
+      },
+      {
+        "route": "/api/build/<int:pk>/create-output/",
+        "target": "BuildOutputCreate",
+        "name": "api-build-output-create"
+      },
+      {
+        "route": "/api/build/<int:pk>/delete-outputs/",
+        "target": "BuildOutputDelete",
+        "name": "api-build-output-delete"
+      },
+      {
+        "route": "/api/build/<int:pk>/scrap-outputs/",
+        "target": "BuildOutputScrap",
+        "name": "api-build-output-scrap"
+      },
+      {
+        "route": "/api/build/<int:pk>/issue/",
+        "target": "BuildIssue",
+        "name": "api-build-issue"
+      },
+      {
+        "route": "/api/build/<int:pk>/hold/",
+        "target": "BuildHold",
+        "name": "api-build-hold"
+      },
+      {
+        "route": "/api/build/<int:pk>/finish/",
+        "target": "BuildFinish",
+        "name": "api-build-finish"
+      },
+      {
+        "route": "/api/build/<int:pk>/cancel/",
+        "target": "BuildCancel",
+        "name": "api-build-cancel"
+      },
+      {
+        "route": "/api/build/<int:pk>/unallocate/",
+        "target": "BuildUnallocate",
+        "name": "api-build-unallocate"
+      },
+      {
+        "route": "/api/build/<int:pk>/",
+        "target": "BuildDetail",
+        "name": "api-build-detail"
+      },
+      {
+        "route": "/api/build/status/",
+        "target": "StatusView",
+        "name": "api-build-status-codes"
+      },
+      {
+        "route": "/api/build/",
+        "target": "BuildList",
+        "name": "api-build-list"
+      }
+    ],
+    "company": [
+      {
+        "route": "/api/company/part/manufacturer/<int:pk>/",
+        "target": "ManufacturerPartDetail",
+        "name": "api-manufacturer-part-detail"
+      },
+      {
+        "route": "/api/company/part/manufacturer/",
+        "target": "ManufacturerPartList",
+        "name": "api-manufacturer-part-list"
+      },
+      {
+        "route": "/api/company/part/<int:pk>/",
+        "target": "SupplierPartDetail",
+        "name": "api-supplier-part-detail"
+      },
+      {
+        "route": "/api/company/part/",
+        "target": "SupplierPartList",
+        "name": "api-supplier-part-list"
+      },
+      {
+        "route": "/api/company/price-break/<int:pk>/",
+        "target": "SupplierPriceBreakDetail",
+        "name": "api-part-supplier-price-detail"
+      },
+      {
+        "route": "/api/company/price-break/",
+        "target": "SupplierPriceBreakList",
+        "name": "api-part-supplier-price-list"
+      },
+      {
+        "route": "/api/company/<int:pk>/",
+        "target": "CompanyDetail",
+        "name": "api-company-detail"
+      },
+      {
+        "route": "/api/company/contact/<int:pk>/",
+        "target": "ContactDetail",
+        "name": "api-contact-detail"
+      },
+      {
+        "route": "/api/company/contact/",
+        "target": "ContactList",
+        "name": "api-contact-list"
+      },
+      {
+        "route": "/api/company/address/<int:pk>/",
+        "target": "AddressDetail",
+        "name": "api-address-detail"
+      },
+      {
+        "route": "/api/company/address/",
+        "target": "AddressList",
+        "name": "api-address-list"
+      },
+      {
+        "route": "/api/company/",
+        "target": "CompanyList",
+        "name": "api-company-list"
+      }
+    ],
+    "importer": [
+      {
+        "route": "/api/importer/models/",
+        "target": "DataImporterModelList",
+        "name": "api-importer-model-list"
+      },
+      {
+        "route": "/api/importer/session/<int:pk>/accept_fields/",
+        "target": "DataImportSessionAcceptFields",
+        "name": "api-import-session-accept-fields"
+      },
+      {
+        "route": "/api/importer/session/<int:pk>/accept_rows/",
+        "target": "DataImportSessionAcceptRows",
+        "name": "api-import-session-accept-rows"
+      },
+      {
+        "route": "/api/importer/session/<int:pk>/",
+        "target": "DataImportSessionDetail",
+        "name": "api-import-session-detail"
+      },
+      {
+        "route": "/api/importer/session/",
+        "target": "DataImportSessionList",
+        "name": "api-importer-session-list"
+      },
+      {
+        "route": "/api/importer/column-mapping/<int:pk>/",
+        "target": "DataImportColumnMappingDetail",
+        "name": "api-importer-mapping-detail"
+      },
+      {
+        "route": "/api/importer/column-mapping/",
+        "target": "DataImportColumnMappingList",
+        "name": "api-importer-mapping-list"
+      },
+      {
+        "route": "/api/importer/row/<int:pk>/",
+        "target": "DataImportRowDetail",
+        "name": "api-importer-row-detail"
+      },
+      {
+        "route": "/api/importer/row/",
+        "target": "DataImportRowList",
+        "name": "api-importer-row-list"
+      }
+    ],
+    "report": [
+      {
+        "route": "/api/label/print/",
+        "target": "LabelPrint",
+        "name": "api-label-print"
+      },
+      {
+        "route": "/api/label/template/<int:pk>/",
+        "target": "LabelTemplateDetail",
+        "name": "api-label-template-detail"
+      },
+      {
+        "route": "/api/label/template/",
+        "target": "LabelTemplateList",
+        "name": "api-label-template-list"
+      },
+      {
+        "route": "/api/report/print/",
+        "target": "ReportPrint",
+        "name": "api-report-print"
+      },
+      {
+        "route": "/api/report/template/<int:pk>/",
+        "target": "ReportTemplateDetail",
+        "name": "api-report-template-detail"
+      },
+      {
+        "route": "/api/report/template/",
+        "target": "ReportTemplateList",
+        "name": "api-report-template-list"
+      },
+      {
+        "route": "/api/report/asset/<int:pk>/",
+        "target": "ReportAssetDetail",
+        "name": "api-report-asset-detail"
+      },
+      {
+        "route": "/api/report/asset/",
+        "target": "ReportAssetList",
+        "name": "api-report-asset-list"
+      },
+      {
+        "route": "/api/report/snippet/<int:pk>/",
+        "target": "ReportSnippetDetail",
+        "name": "api-report-snippet-detail"
+      },
+      {
+        "route": "/api/report/snippet/",
+        "target": "ReportSnippetList",
+        "name": "api-report-snippet-list"
+      }
+    ],
+    "machine": [
+      {
+        "route": "/api/machine/types/",
+        "target": "MachineTypesList",
+        "name": "api-machine-types"
+      },
+      {
+        "route": "/api/machine/drivers/",
+        "target": "MachineDriverList",
+        "name": "api-machine-drivers"
+      },
+      {
+        "route": "/api/machine/status/",
+        "target": "RegistryStatusView",
+        "name": "api-machine-registry-status"
+      },
+      {
+        "route": "/api/machine/<uuid:pk>/settings/^(?P<config_type>M|D)/(?P<key>\\w+)/",
+        "target": "MachineSettingDetail",
+        "name": "api-machine-settings-detail"
+      },
+      {
+        "route": "/api/machine/<uuid:pk>/settings/",
+        "target": "MachineSettingList",
+        "name": "api-machine-settings"
+      },
+      {
+        "route": "/api/machine/<uuid:pk>/restart/",
+        "target": "MachineRestart",
+        "name": "api-machine-restart"
+      },
+      {
+        "route": "/api/machine/<uuid:pk>/",
+        "target": "MachineDetail",
+        "name": "api-machine-detail"
+      },
+      {
+        "route": "/api/machine/",
+        "target": "MachineList",
+        "name": "api-machine-list"
+      }
+    ],
+    "order": [
+      {
+        "route": "/api/order/po/<int:pk>/cancel/",
+        "target": "PurchaseOrderCancel",
+        "name": "api-po-cancel"
+      },
+      {
+        "route": "/api/order/po/<int:pk>/hold/",
+        "target": "PurchaseOrderHold",
+        "name": "api-po-hold"
+      },
+      {
+        "route": "/api/order/po/<int:pk>/complete/",
+        "target": "PurchaseOrderComplete",
+        "name": "api-po-complete"
+      },
+      {
+        "route": "/api/order/po/<int:pk>/issue/",
+        "target": "PurchaseOrderIssue",
+        "name": "api-po-issue"
+      },
+      {
+        "route": "/api/order/po/<int:pk>/receive/",
+        "target": "PurchaseOrderReceive",
+        "name": "api-po-receive"
+      },
+      {
+        "route": "/api/order/po/<int:pk>/",
+        "target": "PurchaseOrderDetail",
+        "name": "api-po-detail"
+      },
+      {
+        "route": "/api/order/po/status/",
+        "target": "StatusView",
+        "name": "api-po-status-codes"
+      },
+      {
+        "route": "/api/order/po/",
+        "target": "PurchaseOrderList",
+        "name": "api-po-list"
+      },
+      {
+        "route": "/api/order/po-line/<int:pk>/",
+        "target": "PurchaseOrderLineItemDetail",
+        "name": "api-po-line-detail"
+      },
+      {
+        "route": "/api/order/po-line/",
+        "target": "PurchaseOrderLineItemList",
+        "name": "api-po-line-list"
+      },
+      {
+        "route": "/api/order/po-extra-line/<int:pk>/",
+        "target": "PurchaseOrderExtraLineDetail",
+        "name": "api-po-extra-line-detail"
+      },
+      {
+        "route": "/api/order/po-extra-line/",
+        "target": "PurchaseOrderExtraLineList",
+        "name": "api-po-extra-line-list"
+      },
+      {
+        "route": "/api/order/so/shipment/<int:pk>/ship/",
+        "target": "SalesOrderShipmentComplete",
+        "name": "api-so-shipment-ship"
+      },
+      {
+        "route": "/api/order/so/shipment/<int:pk>/",
+        "target": "SalesOrderShipmentDetail",
+        "name": "api-so-shipment-detail"
+      },
+      {
+        "route": "/api/order/so/shipment/",
+        "target": "SalesOrderShipmentList",
+        "name": "api-so-shipment-list"
+      },
+      {
+        "route": "/api/order/so/<int:pk>/allocate/",
+        "target": "SalesOrderAllocate",
+        "name": "api-so-allocate"
+      },
+      {
+        "route": "/api/order/so/<int:pk>/allocate-serials/",
+        "target": "SalesOrderAllocateSerials",
+        "name": "api-so-allocate-serials"
+      },
+      {
+        "route": "/api/order/so/<int:pk>/auto-allocate/",
+        "target": "SalesOrderAutoAllocate",
+        "name": "api-so-auto-allocate"
+      },
+      {
+        "route": "/api/order/so/<int:pk>/hold/",
+        "target": "SalesOrderHold",
+        "name": "api-so-hold"
+      },
+      {
+        "route": "/api/order/so/<int:pk>/cancel/",
+        "target": "SalesOrderCancel",
+        "name": "api-so-cancel"
+      },
+      {
+        "route": "/api/order/so/<int:pk>/issue/",
+        "target": "SalesOrderIssue",
+        "name": "api-so-issue"
+      },
+      {
+        "route": "/api/order/so/<int:pk>/complete/",
+        "target": "SalesOrderComplete",
+        "name": "api-so-complete"
+      },
+      {
+        "route": "/api/order/so/<int:pk>/",
+        "target": "SalesOrderDetail",
+        "name": "api-so-detail"
+      },
+      {
+        "route": "/api/order/so/status/",
+        "target": "StatusView",
+        "name": "api-so-status-codes"
+      },
+      {
+        "route": "/api/order/so/",
+        "target": "SalesOrderList",
+        "name": "api-so-list"
+      },
+      {
+        "route": "/api/order/so-line/<int:pk>/",
+        "target": "SalesOrderLineItemDetail",
+        "name": "api-so-line-detail"
+      },
+      {
+        "route": "/api/order/so-line/",
+        "target": "SalesOrderLineItemList",
+        "name": "api-so-line-list"
+      },
+      {
+        "route": "/api/order/so-extra-line/<int:pk>/",
+        "target": "SalesOrderExtraLineDetail",
+        "name": "api-so-extra-line-detail"
+      },
+      {
+        "route": "/api/order/so-extra-line/",
+        "target": "SalesOrderExtraLineList",
+        "name": "api-so-extra-line-list"
+      },
+      {
+        "route": "/api/order/so-allocation/<int:pk>/",
+        "target": "SalesOrderAllocationDetail",
+        "name": "api-so-allocation-detail"
+      },
+      {
+        "route": "/api/order/so-allocation/",
+        "target": "SalesOrderAllocationList",
+        "name": "api-so-allocation-list"
+      },
+      {
+        "route": "/api/order/ro/<int:pk>/cancel/",
+        "target": "ReturnOrderCancel",
+        "name": "api-return-order-cancel"
+      },
+      {
+        "route": "/api/order/ro/<int:pk>/hold/",
+        "target": "ReturnOrderHold",
+        "name": "api-ro-hold"
+      },
+      {
+        "route": "/api/order/ro/<int:pk>/complete/",
+        "target": "ReturnOrderComplete",
+        "name": "api-return-order-complete"
+      },
+      {
+        "route": "/api/order/ro/<int:pk>/issue/",
+        "target": "ReturnOrderIssue",
+        "name": "api-return-order-issue"
+      },
+      {
+        "route": "/api/order/ro/<int:pk>/receive/",
+        "target": "ReturnOrderReceive",
+        "name": "api-return-order-receive"
+      },
+      {
+        "route": "/api/order/ro/<int:pk>/",
+        "target": "ReturnOrderDetail",
+        "name": "api-return-order-detail"
+      },
+      {
+        "route": "/api/order/ro/status/",
+        "target": "StatusView",
+        "name": "api-return-order-status-codes"
+      },
+      {
+        "route": "/api/order/ro/",
+        "target": "ReturnOrderList",
+        "name": "api-return-order-list"
+      },
+      {
+        "route": "/api/order/ro-line/<int:pk>/",
+        "target": "ReturnOrderLineItemDetail",
+        "name": "api-return-order-line-detail"
+      },
+      {
+        "route": "/api/order/ro-line/status/",
+        "target": "StatusView",
+        "name": "api-return-order-line-status-codes"
+      },
+      {
+        "route": "/api/order/ro-line/",
+        "target": "ReturnOrderLineItemList",
+        "name": "api-return-order-line-list"
+      },
+      {
+        "route": "/api/order/ro-extra-line/<int:pk>/",
+        "target": "ReturnOrderExtraLineDetail",
+        "name": "api-return-order-extra-line-detail"
+      },
+      {
+        "route": "/api/order/ro-extra-line/",
+        "target": "ReturnOrderExtraLineList",
+        "name": "api-return-order-extra-line-list"
+      },
+      {
+        "route": "/api/order/transfer-order/<int:pk>/allocate/",
+        "target": "TransferOrderAllocate",
+        "name": "api-transfer-order-allocate"
+      },
+      {
+        "route": "/api/order/transfer-order/<int:pk>/allocate-serials/",
+        "target": "TransferOrderAllocateSerials",
+        "name": "api-transfer-order-allocate-serials"
+      },
+      {
+        "route": "/api/order/transfer-order/<int:pk>/cancel/",
+        "target": "TransferOrderCancel",
+        "name": "api-transfer-order-cancel"
+      },
+      {
+        "route": "/api/order/transfer-order/<int:pk>/hold/",
+        "target": "TransferOrderHold",
+        "name": "api-transfer-order-hold"
+      },
+      {
+        "route": "/api/order/transfer-order/<int:pk>/complete/",
+        "target": "TransferOrderComplete",
+        "name": "api-transfer-order-complete"
+      },
+      {
+        "route": "/api/order/transfer-order/<int:pk>/issue/",
+        "target": "TransferOrderIssue",
+        "name": "api-transfer-order-issue"
+      },
+      {
+        "route": "/api/order/transfer-order/<int:pk>/",
+        "target": "TransferOrderDetail",
+        "name": "api-transfer-order-detail"
+      },
+      {
+        "route": "/api/order/transfer-order/",
+        "target": "TransferOrderList",
+        "name": "api-transfer-order-list"
+      },
+      {
+        "route": "/api/order/transfer-order-line/<int:pk>/",
+        "target": "TransferOrderLineItemDetail",
+        "name": "api-transfer-order-line-detail"
+      },
+      {
+        "route": "/api/order/transfer-order-line/",
+        "target": "TransferOrderLineItemList",
+        "name": "api-transfer-order-line-list"
+      },
+      {
+        "route": "/api/order/transfer-order-allocation/<int:pk>/",
+        "target": "TransferOrderAllocationDetail",
+        "name": "api-transfer-order-allocation-detail"
+      },
+      {
+        "route": "/api/order/transfer-order-allocation/",
+        "target": "TransferOrderAllocationList",
+        "name": "api-transfer-order-allocation-list"
+      },
+      {
+        "route": "/api/order/^calendar/(?P<ordertype>purchase-order|sales-order|return-order|transfer-order)/calendar.ics",
+        "target": "",
+        "name": "api-po-so-calendar"
+      }
+    ],
+    "common": [
+      {
+        "route": "/api/settings/user/^(?P<key>\\w+)/",
+        "target": "UserSettingsDetail",
+        "name": "api-user-setting-detail"
+      },
+      {
+        "route": "/api/settings/user/",
+        "target": "UserSettingsList",
+        "name": "api-user-setting-list"
+      },
+      {
+        "route": "/api/settings/global/^(?P<key>\\w+)/",
+        "target": "GlobalSettingsDetail",
+        "name": "api-global-setting-detail"
+      },
+      {
+        "route": "/api/settings/global/",
+        "target": "GlobalSettingsList",
+        "name": "api-global-setting-list"
+      },
+      {
+        "route": "/api/webhook/<slug:endpoint>/",
+        "target": "WebhookView",
+        "name": "api-webhook"
+      },
+      {
+        "route": "/api/notes-image-upload/",
+        "target": "NotesImageList",
+        "name": "api-notes-image-list"
+      },
+      {
+        "route": "/api/background-task/pending/",
+        "target": "PendingTaskList",
+        "name": "api-pending-task-list"
+      },
+      {
+        "route": "/api/background-task/scheduled/",
+        "target": "ScheduledTaskList",
+        "name": "api-scheduled-task-list"
+      },
+      {
+        "route": "/api/background-task/failed/",
+        "target": "FailedTaskList",
+        "name": "api-failed-task-list"
+      },
+      {
+        "route": "/api/background-task/<str:task_id>/",
+        "target": "BackgroundTaskDetail",
+        "name": "api-task-detail"
+      },
+      {
+        "route": "/api/background-task/",
+        "target": "BackgroundTaskOverview",
+        "name": "api-task-overview"
+      },
+      {
+        "route": "/api/attachment/<int:pk>/",
+        "target": "AttachmentDetail",
+        "name": "api-attachment-detail"
+      },
+      {
+        "route": "/api/attachment/",
+        "target": "AttachmentList",
+        "name": "api-attachment-list"
+      },
+      {
+        "route": "/api/parameter/template/<int:pk>/",
+        "target": "ParameterTemplateDetail",
+        "name": "api-parameter-template-detail"
+      },
+      {
+        "route": "/api/parameter/template/",
+        "target": "ParameterTemplateList",
+        "name": "api-parameter-template-list"
+      },
+      {
+        "route": "/api/parameter/<int:pk>/",
+        "target": "ParameterDetail",
+        "name": "api-parameter-detail"
+      },
+      {
+        "route": "/api/parameter/",
+        "target": "ParameterList",
+        "name": "api-parameter-list"
+      },
+      {
+        "route": "/api/metadata/<str:model>/<str:lookup_field>/<str:lookup_value>/",
+        "target": "GenericMetadataView",
+        "name": "api-generic-metadata"
+      },
+      {
+        "route": "/api/metadata/<str:model>/<int:pk>/",
+        "target": "SimpleGenericMetadataView",
+        "name": "api-generic-metadata"
+      },
+      {
+        "route": "/api/project-code/<int:pk>/",
+        "target": "ProjectCodeDetail",
+        "name": "api-project-code-detail"
+      },
+      {
+        "route": "/api/project-code/",
+        "target": "ProjectCodeList",
+        "name": "api-project-code-list"
+      },
+      {
+        "route": "/api/tag/<int:pk>/",
+        "target": "TagDetail",
+        "name": "api-tag-detail"
+      },
+      {
+        "route": "/api/tag/",
+        "target": "TagList",
+        "name": "api-tag-list"
+      },
+      {
+        "route": "/api/flags/<str:key>/",
+        "target": "FlagDetail",
+        "name": "api-flag-detail"
+      },
+      {
+        "route": "/api/flags/",
+        "target": "FlagList",
+        "name": "api-flag-list"
+      },
+      {
+        "route": "/api/generic/status/",
+        "target": "include(generic_states_api_urls)",
+        "name": ""
+      },
+      {
+        "route": "/api/contenttype/<int:pk>/",
+        "target": "ContentTypeDetail",
+        "name": "api-contenttype-detail"
+      },
+      {
+        "route": "/api/contenttype/model/<str:model>/",
+        "target": "ContentTypeModelDetail",
+        "name": "api-contenttype-detail-modelname"
+      },
+      {
+        "route": "/api/contenttype/",
+        "target": "ContentTypeList",
+        "name": "api-contenttype-list"
+      },
+      {
+        "route": "/api/icons/",
+        "target": "IconList",
+        "name": "api-icon-list"
+      },
+      {
+        "route": "/api/selection/<int:pk>/entry/<int:entrypk>/",
+        "target": "SelectionEntryDetail",
+        "name": "api-selectionlistentry-detail"
+      },
+      {
+        "route": "/api/selection/<int:pk>/entry/",
+        "target": "SelectionEntryList",
+        "name": "api-selectionlistentry-list"
+      },
+      {
+        "route": "/api/selection/<int:pk>/",
+        "target": "SelectionListDetail",
+        "name": "api-selectionlist-detail"
+      },
+      {
+        "route": "/api/selection/",
+        "target": "SelectionListList",
+        "name": "api-selectionlist-list"
+      },
+      {
+        "route": "/api/system/health/",
+        "target": "HealthCheckView",
+        "name": "api-system-health"
+      },
+      {
+        "route": "/api/system-internal/observability/end",
+        "target": "ObservabilityEnd",
+        "name": "api-system-observability"
+      },
+      {
+        "route": "/api/",
+        "target": "include(common_router.urls)",
+        "name": ""
+      }
+    ],
+    "stock": [
+      {
+        "route": "/api/stock/location/tree/",
+        "target": "StockLocationTree",
+        "name": "api-location-tree"
+      },
+      {
+        "route": "/api/stock/location/<int:pk>/",
+        "target": "StockLocationDetail",
+        "name": "api-location-detail"
+      },
+      {
+        "route": "/api/stock/location/",
+        "target": "StockLocationList",
+        "name": "api-location-list"
+      },
+      {
+        "route": "/api/stock/location-type/<int:pk>/",
+        "target": "StockLocationTypeDetail",
+        "name": "api-location-type-detail"
+      },
+      {
+        "route": "/api/stock/location-type/",
+        "target": "StockLocationTypeList",
+        "name": "api-location-type-list"
+      },
+      {
+        "route": "/api/stock/count/",
+        "target": "StockCount",
+        "name": "api-stock-count"
+      },
+      {
+        "route": "/api/stock/add/",
+        "target": "StockAdd",
+        "name": "api-stock-add"
+      },
+      {
+        "route": "/api/stock/remove/",
+        "target": "StockRemove",
+        "name": "api-stock-remove"
+      },
+      {
+        "route": "/api/stock/transfer/",
+        "target": "StockTransfer",
+        "name": "api-stock-transfer"
+      },
+      {
+        "route": "/api/stock/return/",
+        "target": "StockReturn",
+        "name": "api-stock-return"
+      },
+      {
+        "route": "/api/stock/assign/",
+        "target": "StockAssign",
+        "name": "api-stock-assign"
+      },
+      {
+        "route": "/api/stock/merge/",
+        "target": "StockMerge",
+        "name": "api-stock-merge"
+      },
+      {
+        "route": "/api/stock/change_status/",
+        "target": "StockChangeStatus",
+        "name": "api-stock-change-status"
+      },
+      {
+        "route": "/api/stock/test/<int:pk>/",
+        "target": "StockItemTestResultDetail",
+        "name": "api-stock-test-result-detail"
+      },
+      {
+        "route": "/api/stock/test/",
+        "target": "StockItemTestResultList",
+        "name": "api-stock-test-result-list"
+      },
+      {
+        "route": "/api/stock/track/<int:pk>/",
+        "target": "StockTrackingDetail",
+        "name": "api-stock-tracking-detail"
+      },
+      {
+        "route": "/api/stock/track/status/",
+        "target": "StatusView",
+        "name": "api-stock-tracking-status-codes"
+      },
+      {
+        "route": "/api/stock/track/",
+        "target": "StockTrackingList",
+        "name": "api-stock-tracking-list"
+      },
+      {
+        "route": "/api/stock/<int:pk>/convert/",
+        "target": "StockItemConvert",
+        "name": "api-stock-item-convert"
+      },
+      {
+        "route": "/api/stock/<int:pk>/disassemble/",
+        "target": "StockItemDisassemble",
+        "name": "api-stock-item-disassemble"
+      },
+      {
+        "route": "/api/stock/<int:pk>/install/",
+        "target": "StockItemInstall",
+        "name": "api-stock-item-install"
+      },
+      {
+        "route": "/api/stock/<int:pk>/serialize/",
+        "target": "StockItemSerialize",
+        "name": "api-stock-item-serialize"
+      },
+      {
+        "route": "/api/stock/<int:pk>/uninstall/",
+        "target": "StockItemUninstall",
+        "name": "api-stock-item-uninstall"
+      },
+      {
+        "route": "/api/stock/<int:pk>/serial-numbers/",
+        "target": "StockItemSerialNumbers",
+        "name": "api-stock-item-serial-numbers"
+      },
+      {
+        "route": "/api/stock/<int:pk>/",
+        "target": "StockDetail",
+        "name": "api-stock-detail"
+      },
+      {
+        "route": "/api/stock/status/",
+        "target": "StatusView",
+        "name": "api-stock-status-codes"
+      },
+      {
+        "route": "/api/stock/",
+        "target": "StockList",
+        "name": "api-stock-list"
+      }
+    ],
+    "users": [
+      {
+        "route": "/api/user/roles/",
+        "target": "",
+        "name": "api-user-roles_legacy"
+      },
+      {
+        "route": "/api/user/token/",
+        "target": "",
+        "name": "api-token_legacy"
+      },
+      {
+        "route": "/api/user/profile/",
+        "target": "",
+        "name": "api-user-profile_legacy"
+      },
+      {
+        "route": "/api/user/me/profile/",
+        "target": "UserProfileDetail",
+        "name": "api-user-profile"
+      },
+      {
+        "route": "/api/user/me/roles/",
+        "target": "RoleDetails",
+        "name": "api-user-roles"
+      },
+      {
+        "route": "/api/user/me/token/",
+        "target": "",
+        "name": "api-token"
+      },
+      {
+        "route": "/api/user/me/",
+        "target": "MeUserDetail",
+        "name": "api-user-me"
+      },
+      {
+        "route": "/api/user/tokens/<int:pk>/",
+        "target": "TokenDetailView",
+        "name": "api-token-detail"
+      },
+      {
+        "route": "/api/user/tokens/",
+        "target": "TokenListView",
+        "name": "api-token-list"
+      },
+      {
+        "route": "/api/user/owner/<int:pk>/",
+        "target": "OwnerDetail",
+        "name": "api-owner-detail"
+      },
+      {
+        "route": "/api/user/owner/",
+        "target": "OwnerList",
+        "name": "api-owner-list"
+      },
+      {
+        "route": "/api/user/group/<int:pk>/",
+        "target": "GroupDetail",
+        "name": "api-group-detail"
+      },
+      {
+        "route": "/api/user/group/",
+        "target": "GroupList",
+        "name": "api-group-list"
+      },
+      {
+        "route": "/api/user/ruleset/<int:pk>/",
+        "target": "RuleSetDetail",
+        "name": "api-ruleset-detail"
+      },
+      {
+        "route": "/api/user/ruleset/",
+        "target": "RuleSetList",
+        "name": "api-ruleset-list"
+      },
+      {
+        "route": "/api/user/<int:pk>/set-password/",
+        "target": "UserDetailSetPassword",
+        "name": "api-user-set-password"
+      },
+      {
+        "route": "/api/user/<int:pk>/",
+        "target": "UserDetail",
+        "name": "api-user-detail"
+      },
+      {
+        "route": "/api/user/",
+        "target": "UserList",
+        "name": "api-user-list"
+      }
+    ],
+    "plugin": [
+      {
+        "route": "/api/action/",
+        "target": "ActionPluginView",
+        "name": "api-action-plugin"
+      },
+      {
+        "route": "/api/barcode/history/<int:pk>/",
+        "target": "BarcodeScanResultDetail",
+        "name": "api-barcode-scan-result-detail"
+      },
+      {
+        "route": "/api/barcode/history/",
+        "target": "BarcodeScanResultList",
+        "name": "api-barcode-scan-result-list"
+      },
+      {
+        "route": "/api/barcode/generate/",
+        "target": "BarcodeGenerate",
+        "name": "api-barcode-generate"
+      },
+      {
+        "route": "/api/barcode/link/",
+        "target": "BarcodeAssign",
+        "name": "api-barcode-link"
+      },
+      {
+        "route": "/api/barcode/unlink/",
+        "target": "BarcodeUnassign",
+        "name": "api-barcode-unlink"
+      },
+      {
+        "route": "/api/barcode/po-receive/",
+        "target": "BarcodePOReceive",
+        "name": "api-barcode-po-receive"
+      },
+      {
+        "route": "/api/barcode/po-allocate/",
+        "target": "BarcodePOAllocate",
+        "name": "api-barcode-po-allocate"
+      },
+      {
+        "route": "/api/barcode/so-allocate/",
+        "target": "BarcodeSOAllocate",
+        "name": "api-barcode-so-allocate"
+      },
+      {
+        "route": "/api/barcode/",
+        "target": "BarcodeScan",
+        "name": "api-barcode-scan"
+      },
+      {
+        "route": "/api/locate/",
+        "target": "LocatePluginView",
+        "name": "api-locate-plugin"
+      },
+      {
+        "route": "/api/plugins/ui/features/<str:feature>/",
+        "target": "PluginUIFeatureList",
+        "name": "api-plugin-ui-feature-list"
+      },
+      {
+        "route": "/api/plugins/reload/",
+        "target": "PluginReload",
+        "name": "api-plugin-reload"
+      },
+      {
+        "route": "/api/plugins/install/",
+        "target": "PluginInstall",
+        "name": "api-plugin-install"
+      },
+      {
+        "route": "/api/plugins/status/",
+        "target": "RegistryStatusView",
+        "name": "api-plugin-registry-status"
+      },
+      {
+        "route": "/api/plugins/settings/",
+        "target": "PluginSettingList",
+        "name": "api-plugin-setting-list"
+      },
+      {
+        "route": "/api/plugins/<str:plugin>/user-settings/^(?P<key>\\w+)/",
+        "target": "PluginUserSettingDetail",
+        "name": "api-plugin-user-setting-detail"
+      },
+      {
+        "route": "/api/plugins/<str:plugin>/user-settings/",
+        "target": "PluginUserSettingList",
+        "name": "api-plugin-user-setting-list"
+      },
+      {
+        "route": "/api/plugins/<str:plugin>/settings/^(?P<key>\\w+)/",
+        "target": "PluginSettingDetail",
+        "name": "api-plugin-setting-detail"
+      },
+      {
+        "route": "/api/plugins/<str:plugin>/settings/",
+        "target": "PluginAllSettingList",
+        "name": "api-plugin-settings"
+      },
+      {
+        "route": "/api/plugins/<str:plugin>/activate/",
+        "target": "PluginActivate",
+        "name": "api-plugin-detail-activate"
+      },
+      {
+        "route": "/api/plugins/<str:plugin>/uninstall/",
+        "target": "PluginUninstall",
+        "name": "api-plugin-uninstall"
+      },
+      {
+        "route": "/api/plugins/<str:plugin>/admin/",
+        "target": "PluginAdminDetail",
+        "name": "api-plugin-admin"
+      },
+      {
+        "route": "/api/plugins/<str:plugin>/",
+        "target": "PluginDetail",
+        "name": "api-plugin-detail"
+      },
+      {
+        "route": "/api/plugins/",
+        "target": "PluginList",
+        "name": "api-plugin-list"
+      },
+      {
+        "route": "/api/supplier/list/",
+        "target": "ListSupplier",
+        "name": "api-supplier-list"
+      },
+      {
+        "route": "/api/supplier/search/",
+        "target": "SearchPart",
+        "name": "api-supplier-search"
+      },
+      {
+        "route": "/api/supplier/import/",
+        "target": "ImportPart",
+        "name": "api-supplier-import"
+      }
+    ]
+  },
+  "other_endpoints_by_module": {}
+}

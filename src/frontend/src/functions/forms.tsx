@@ -87,15 +87,43 @@ export function extractAvailableFields(
  */
 export function constructField({
   field,
-  definition
+  definition,
+  fieldName
 }: {
   field: ApiFormFieldType;
   definition?: ApiFormFieldType;
+  fieldName?: string;
 }) {
   const def = {
     ...definition,
     ...field
   };
+
+  const name = fieldName || def.name;
+
+  if (!def.field_type) {
+    if (typeof def.value === 'boolean' || typeof def.default === 'boolean') {
+      def.field_type = 'boolean';
+    } else if (def.choices) {
+      def.field_type = 'choice';
+    } else if (name && (name.endsWith('_date') || name.endsWith('Date') || name === 'date')) {
+      def.field_type = 'date';
+    } else if (name && ['category', 'part', 'location', 'default_location', 'supplier', 'manufacturer', 'responsible', 'variant_of', 'revision_of', 'sub_part', 'order', 'destination'].includes(name)) {
+      def.field_type = 'related field';
+    } else if (name && ['quantity', 'price', 'purchase_price', 'amount', 'minimum_stock', 'maximum_stock'].includes(name)) {
+      def.field_type = 'string'; // Usually parsed as string/number in UI
+    } else {
+      def.field_type = 'string';
+    }
+  }
+
+  if (!def.label && name) {
+    def.label = name.split('_').map(word => {
+      // Keep things like IPN uppercase
+      if (word.toUpperCase() === word && word.length > 1 && !/\d/.test(word)) return word;
+      return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
+    }).join(' ');
+  }
 
   switch (def.field_type) {
     case 'nested object':
@@ -103,7 +131,8 @@ export function constructField({
       for (const k of Object.keys(field.children ?? {})) {
         def.children[k] = constructField({
           field: field.children?.[k] ?? {},
-          definition: definition?.children?.[k] ?? {}
+          definition: definition?.children?.[k] ?? {},
+          fieldName: k
         });
       }
       break;
@@ -112,7 +141,8 @@ export function constructField({
 
       def.child = constructField({
         // use the raw definition here as field, since a dependent field cannot be influenced by the frontend
-        field: definition.child ?? {}
+        field: definition.child ?? {},
+        fieldName: name
       });
       break;
     default:

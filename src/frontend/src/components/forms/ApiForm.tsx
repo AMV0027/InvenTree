@@ -141,7 +141,8 @@ export function OptionsApiForm({
     for (const [k, v] of Object.entries(_props.fields)) {
       const constructed = constructField({
         field: v,
-        definition: optionsQuery?.data?.[k]
+        definition: optionsQuery?.data?.[k],
+        fieldName: k
       });
 
       // If the user has specified initial data, use that value here

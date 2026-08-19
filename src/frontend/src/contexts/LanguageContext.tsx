@@ -188,6 +188,8 @@ export function getPriorityLocale(): string {
   return userDefault || serverDefault || defaultLocale;
 }
 
+const localeModules = import.meta.glob('../locales/*/messages.ts');
+
 export async function activateLocale(locale: string | null) {
   if (!locale) {
     locale = getPriorityLocale();
@@ -196,8 +198,15 @@ export async function activateLocale(locale: string | null) {
   const localeDir = locale.split('-')[0]; // Extract the base locale (e.g., 'en' from 'en-US')
 
   try {
-    const { messages } = await import(`../locales/${localeDir}/messages.ts`);
-    i18n.load(locale, messages);
+    const path = `../locales/${localeDir}/messages.ts`;
+    const importFunc = localeModules[path];
+    
+    if (!importFunc) {
+      throw new Error(`Locale file not found for path: ${path}`);
+    }
+    
+    const module = (await importFunc()) as any;
+    i18n.load(locale, module.messages);
     i18n.activate(locale);
     markLocaleReady();
   } catch (err) {

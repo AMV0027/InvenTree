@@ -15,7 +15,8 @@ import {
   IconServerCog,
   IconShoppingCart,
   IconTransfer,
-  IconTruckDelivery
+  IconTruckDelivery,
+  IconMail
 } from '@tabler/icons-react';
 import { useMemo } from 'react';
 
@@ -73,6 +74,23 @@ export default function SystemSettings() {
               ]}
             />
           </>
+        )
+      },
+      {
+        name: 'smtp',
+        label: t`Email (SMTP)`,
+        icon: <IconMail />,
+        content: (
+          <GlobalSettingList
+            heading={t`SMTP Configuration`}
+            keys={[
+              'SMTP_HOST',
+              'SMTP_PORT',
+              'SMTP_USER',
+              'SMTP_PASS',
+              'SMTP_FROM'
+            ]}
+          />
         )
       },
       {

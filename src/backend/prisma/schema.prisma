@@ -1,0 +1,1458 @@
+// InvenTree Prisma PostgreSQL Schema
+// Generated statically from Django model definitions
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// ==================== CORE STUBS ====================
+
+
+
+model User {
+  id Int @id @default(autoincrement())
+  username String @unique
+  password String
+  email String?
+  isStaff Boolean @default(false)
+  isSuperuser Boolean @default(false)
+  build_completedBys Build[] @relation("Build_User_1")
+  build_issuedBys Build[] @relation("Build_User_2")
+  updatedusermixin_updatedBys Updatedusermixin[] @relation("Updatedusermixin_User_1")
+  inventreeusersetting_users Inventreeusersetting[] @relation("Inventreeusersetting_User_1")
+  webhookendpoint_users Webhookendpoint[] @relation("Webhookendpoint_User_1")
+  notificationmessage_users Notificationmessage[] @relation("Notificationmessage_User_1")
+  notesimage_users Notesimage[] @relation("Notesimage_User_1")
+  attachment_uploadUsers Attachment[] @relation("Attachment_User_1")
+  barcodescanresult_users Barcodescanresult[] @relation("Barcodescanresult_User_1")
+  dataoutput_users Dataoutput[] @relation("Dataoutput_User_1")
+  dataimportsession_users Dataimportsession[] @relation("Dataimportsession_User_1")
+  order_createdBys Order[] @relation("Order_User_1")
+  purchaseorder_receivedBys Purchaseorder[] @relation("Purchaseorder_User_1")
+  salesorder_shippedBys Salesorder[] @relation("Salesorder_User_1")
+  salesordershipment_checkedBys Salesordershipment[] @relation("Salesordershipment_User_1")
+  part_bomCheckedBys Part[] @relation("Part_User_1")
+  part_creationUsers Part[] @relation("Part_User_2")
+  partstar_users Partstar[] @relation("Partstar_User_1")
+  partcategorystar_users Partcategorystar[] @relation("Partcategorystar_User_1")
+  pluginusersetting_users Pluginusersetting[] @relation("Pluginusersetting_User_1")
+  stockitem_stocktakeUsers Stockitem[] @relation("Stockitem_User_1")
+  stockitemtracking_users Stockitemtracking[] @relation("Stockitemtracking_User_1")
+  stockitemtestresult_users Stockitemtestresult[] @relation("Stockitemtestresult_User_1")
+  apitoken_users Apitoken[] @relation("Apitoken_User_1")
+  userprofile_users Userprofile[] @relation("Userprofile_User_1")
+  @@map("auth_user")
+}
+
+model Group {
+  id Int @id @default(autoincrement())
+  ruleset_groups Ruleset[] @relation("Ruleset_Group_1")
+  userprofile_primaryGroups Userprofile[] @relation("Userprofile_Group_1")
+  @@map("auth_group")
+}
+
+model ContentType {
+  id Int @id @default(autoincrement())
+  notificationmessage_targetContentTypes Notificationmessage[] @relation("Notificationmessage_ContentType_1")
+  notificationmessage_sourceContentTypes Notificationmessage[] @relation("Notificationmessage_ContentType_2")
+  inventreecustomuserstatemodel_models Inventreecustomuserstatemodel[] @relation("Inventreecustomuserstatemodel_ContentType_1")
+  parametertemplate_modelTypes Parametertemplate[] @relation("Parametertemplate_ContentType_1")
+  parameter_modelTypes Parameter[] @relation("Parameter_ContentType_1")
+  owner_ownerTypes Owner[] @relation("Owner_ContentType_1")
+  @@map("django_content_type")
+}
+
+/// A Build object organizes the creation of new StockItem objects from other existing StockItem objects.
+model Build {
+  id Int @id @default(autoincrement())
+  reference String
+  title String?
+  external Boolean
+  quantity Int
+  completed Int
+  status String
+  batch String?
+  creationDate DateTime
+  startDate DateTime?
+  targetDate DateTime?
+  completionDate DateTime?
+  link String?
+  priority Int
+  parentId Int?
+  parent Build? @relation("Build_Build_1", fields: [parentId], references: [id])
+  partId Int
+  part Part @relation("Build_Part_1", fields: [partId], references: [id])
+  salesOrderId Int?
+  salesOrder Salesorder? @relation("Build_Salesorder_1", fields: [salesOrderId], references: [id])
+  takeFromId Int?
+  takeFrom Stocklocation? @relation("Build_Stocklocation_1", fields: [takeFromId], references: [id])
+  destinationId Int?
+  destination Stocklocation? @relation("Build_Stocklocation_2", fields: [destinationId], references: [id])
+  completedById Int?
+  completedBy User? @relation("Build_User_1", fields: [completedById], references: [id])
+  issuedById Int?
+  issuedBy User? @relation("Build_User_2", fields: [issuedById], references: [id])
+  responsibleId Int?
+  responsible Owner? @relation("Build_Owner_1", fields: [responsibleId], references: [id])
+  projectCodeId Int?
+  projectCode Projectcode? @relation("Build_Projectcode_1", fields: [projectCodeId], references: [id])
+  build_parents Build[] @relation("Build_Build_1")
+  buildline_builds Buildline[] @relation("Buildline_Build_1")
+  purchaseorderlineitem_buildOrders Purchaseorderlineitem[] @relation("Purchaseorderlineitem_Build_1")
+  stockitem_builds Stockitem[] @relation("Stockitem_Build_1")
+  stockitem_consumedBys Stockitem[] @relation("Stockitem_Build_2")
+  @@map("build_build")
+}
+
+/// A BuildLine object links a BOMItem to a Build.
+model Buildline {
+  id Int @id @default(autoincrement())
+  quantity Decimal
+  consumed Decimal
+  buildId Int
+  build Build @relation("Buildline_Build_1", fields: [buildId], references: [id])
+  bomItemId Int
+  bomItem Bomitem @relation("Buildline_Bomitem_1", fields: [bomItemId], references: [id])
+  builditem_buildLines Builditem[] @relation("Builditem_Buildline_1")
+  @@map("build_build_line")
+}
+
+/// A BuildItem links multiple StockItem objects to a Build.
+model Builditem {
+  id Int @id @default(autoincrement())
+  quantity Decimal
+  buildLineId Int?
+  buildLine Buildline? @relation("Builditem_Buildline_1", fields: [buildLineId], references: [id])
+  stockItemId Int
+  stockItem Stockitem @relation("Builditem_Stockitem_1", fields: [stockItemId], references: [id])
+  installIntoId Int?
+  installInto Stockitem? @relation("Builditem_Stockitem_2", fields: [installIntoId], references: [id])
+  @@map("build_build_item")
+}
+
+/// A base class for InvenTree models to include shared meta fields.
+model Metamixin {
+  id Int @id @default(autoincrement())
+  updated DateTime?
+  @@map("common_meta_mixin")
+}
+
+/// A mixin which stores additional information about the user who created or last modified the object.
+model Updatedusermixin {
+  id Int @id @default(autoincrement())
+  updated DateTime?
+  updatedById Int?
+  updatedBy User? @relation("Updatedusermixin_User_1", fields: [updatedById], references: [id])
+  @@map("common_updated_user_mixin")
+}
+
+/// A ProjectCode is a unique identifier for a project.
+model Projectcode {
+  id Int @id @default(autoincrement())
+  code String
+  description String?
+  active Boolean
+  responsibleId Int?
+  responsible Owner? @relation("Projectcode_Owner_1", fields: [responsibleId], references: [id])
+  build_projectCodes Build[] @relation("Build_Projectcode_1")
+  order_projectCodes Order[] @relation("Order_Projectcode_1")
+  orderlineitem_projectCodes Orderlineitem[] @relation("Orderlineitem_Projectcode_1")
+  @@map("common_project_code")
+}
+
+/// An base InvenTreeSetting object is a key:value pair used for storing single values (e.g. one-off settings values).
+model Baseinventreesetting {
+  id Int @id @default(autoincrement())
+  key String
+  value String?
+  @@map("common_base_inven_tree_setting")
+}
+
+/// An InvenTreeSetting object is a key:value pair used for storing single values (e.g. one-off settings values).
+model Inventreesetting {
+  id Int @id @default(autoincrement())
+  key String
+  @@map("common_inven_tree_setting")
+}
+
+/// An InvenTreeSetting object with a user context.
+model Inventreeusersetting {
+  id Int @id @default(autoincrement())
+  key String
+  userId Int?
+  user User? @relation("Inventreeusersetting_User_1", fields: [userId], references: [id])
+  @@map("common_inven_tree_user_setting")
+}
+
+/// Represents a PriceBreak model.
+model Pricebreak {
+  id Int @id @default(autoincrement())
+  quantity Decimal
+  price Decimal?
+  @@map("common_price_break")
+}
+
+/// Defines a Webhook endpoint.
+model Webhookendpoint {
+  id Int @id @default(autoincrement())
+  endpointId String
+  name String?
+  active Boolean
+  token String?
+  secret String?
+  userId Int?
+  user User? @relation("Webhookendpoint_User_1", fields: [userId], references: [id])
+  webhookmessage_endpoints Webhookmessage[] @relation("Webhookmessage_Webhookendpoint_1")
+  @@map("common_webhook_endpoint")
+}
+
+/// Defines a webhook message.
+model Webhookmessage {
+  id Int @id @default(autoincrement())
+  messageId String
+  host String
+  header String?
+  body Json?
+  workedOn Boolean
+  endpointId Int?
+  endpoint Webhookendpoint? @relation("Webhookmessage_Webhookendpoint_1", fields: [endpointId], references: [id])
+  @@map("common_webhook_message")
+}
+
+/// A NotificationEntry records the last time a particular notification was sent out.
+model Notificationentry {
+  id Int @id @default(autoincrement())
+  key String
+  uid String
+  @@map("common_notification_entry")
+}
+
+/// A NotificationMessage is a message sent to a particular user, notifying them of some important information.
+model Notificationmessage {
+  id Int @id @default(autoincrement())
+  targetObjectId String
+  targetObject Int
+  sourceObjectId String?
+  sourceObject Int
+  category String
+  name String
+  message String?
+  link String?
+  creation DateTime
+  read Boolean
+  targetContentTypeId Int
+  targetContentType ContentType @relation("Notificationmessage_ContentType_1", fields: [targetContentTypeId], references: [id])
+  sourceContentTypeId Int?
+  sourceContentType ContentType? @relation("Notificationmessage_ContentType_2", fields: [sourceContentTypeId], references: [id])
+  userId Int?
+  user User? @relation("Notificationmessage_User_1", fields: [userId], references: [id])
+  @@map("common_notification_message")
+}
+
+/// A NewsFeedEntry represents an entry on the RSS/Atom feed that is generated for InvenTree news.
+model Newsfeedentry {
+  id Int @id @default(autoincrement())
+  feedId String
+  title String
+  link String
+  published DateTime
+  author String
+  summary String
+  read Boolean
+  @@map("common_news_feed_entry")
+}
+
+/// Model for storing uploading images for the 'notes' fields of various models.
+model Notesimage {
+  id Int @id @default(autoincrement())
+  image String
+  date DateTime
+  modelType String?
+  modelId Int?
+  userId Int?
+  user User? @relation("Notesimage_User_1", fields: [userId], references: [id])
+  @@map("common_notes_image")
+}
+
+/// Model for storing custom physical unit definitions.
+model Customunit {
+  id Int @id @default(autoincrement())
+  name String
+  symbol String?
+  definition String
+  @@map("common_custom_unit")
+}
+
+/// Class which represents an uploaded file attachment.
+model Attachment {
+  id Int @id @default(autoincrement())
+  modelType String
+  modelId Int
+  attachment String?
+  thumbnail String?
+  link String?
+  comment String?
+  uploadDate DateTime?
+  isImage Boolean
+  fileSize Int
+  uploadUserId Int?
+  uploadUser User? @relation("Attachment_User_1", fields: [uploadUserId], references: [id])
+  @@map("common_attachment")
+}
+
+/// Custom model to extends any registered state with extra custom, user defined states.
+model Inventreecustomuserstatemodel {
+  id Int @id @default(autoincrement())
+  referenceStatus String
+  logicalKey Int
+  key Int
+  name String
+  label String
+  color String
+  modelId Int?
+  model ContentType? @relation("Inventreecustomuserstatemodel_ContentType_1", fields: [modelId], references: [id])
+  @@map("common_inven_tree_custom_user_state_model")
+}
+
+/// Class which represents a list of selectable items for parameters.
+model Selectionlist {
+  id Int @id @default(autoincrement())
+  name String
+  description String?
+  locked Boolean
+  active Boolean
+  sourceString String?
+  created DateTime
+  lastUpdated DateTime
+  sourcePluginId Int?
+  sourcePlugin Pluginconfig? @relation("Selectionlist_Pluginconfig_1", fields: [sourcePluginId], references: [id])
+  defaultId Int?
+  default Selectionlistentry? @relation("Selectionlist_Selectionlistentry_1", fields: [defaultId], references: [id])
+  selectionlistentry_lists Selectionlistentry[] @relation("Selectionlistentry_Selectionlist_2")
+  parametertemplate_selectionlists Parametertemplate[] @relation("Parametertemplate_Selectionlist_1")
+  @@map("common_selection_list")
+}
+
+/// Class which represents a single entry in a SelectionList.
+model Selectionlistentry {
+  id Int @id @default(autoincrement())
+  value String
+  label String
+  description String?
+  active Boolean
+  listId Int?
+  list Selectionlist? @relation("Selectionlistentry_Selectionlist_2", fields: [listId], references: [id])
+  selectionlist_defaults Selectionlist[] @relation("Selectionlist_Selectionlistentry_1")
+  @@map("common_selection_list_entry")
+}
+
+/// A ParameterTemplate provides a template for defining parameter values against various models.
+model Parametertemplate {
+  id Int @id @default(autoincrement())
+  name String
+  units String?
+  description String?
+  checkbox Boolean
+  choices String?
+  enabled Boolean
+  unique Int
+  modelTypeId Int?
+  modelType ContentType? @relation("Parametertemplate_ContentType_1", fields: [modelTypeId], references: [id])
+  selectionlistId Int?
+  selectionlist Selectionlist? @relation("Parametertemplate_Selectionlist_1", fields: [selectionlistId], references: [id])
+  parameter_templates Parameter[] @relation("Parameter_Parametertemplate_1")
+  partcategoryparametertemplate_templates Partcategoryparametertemplate[] @relation("Partcategoryparametertemplate_Parametertemplate_1")
+  @@map("part_partparametertemplate")
+}
+
+/// Class which represents a parameter value assigned to a particular model instance.
+model Parameter {
+  id Int @id @default(autoincrement())
+  modelId Int
+  contentObject Int
+  data String
+  dataNumeric Float?
+  note String?
+  modelTypeId Int
+  modelType ContentType @relation("Parameter_ContentType_1", fields: [modelTypeId], references: [id])
+  templateId Int
+  template Parametertemplate @relation("Parameter_Parametertemplate_1", fields: [templateId], references: [id])
+  @@map("part_partparameter")
+}
+
+/// Model for storing barcode scans results.
+model Barcodescanresult {
+  id Int @id @default(autoincrement())
+  data String
+  timestamp DateTime
+  endpoint String?
+  context Json?
+  response Json?
+  result Boolean
+  userId Int?
+  user User? @relation("Barcodescanresult_User_1", fields: [userId], references: [id])
+  @@map("common_barcode_scan_result")
+}
+
+/// Model for storing generated data output from various processes.
+model Dataoutput {
+  id Int @id @default(autoincrement())
+  created DateTime
+  total Int
+  progress Int
+  complete Boolean
+  outputType String?
+  templateName String?
+  plugin String?
+  output String?
+  errors Json?
+  userId Int?
+  user User? @relation("Dataoutput_User_1", fields: [userId], references: [id])
+  @@map("common_data_output")
+}
+
+/// Model for storing email messages sent or received by the system.
+model Emailmessage {
+  id Int @id @default(autoincrement())
+  globalId String
+  messageIdKey String?
+  threadIdKey String?
+  subject String
+  body String
+  to String
+  sender String
+  status String?
+  timestamp DateTime
+  headers Json?
+  fullMessage String?
+  direction String?
+  priority Int
+  deliveryOptions Json?
+  errorCode String?
+  errorMessage String?
+  errorTimestamp DateTime?
+  threadId Int?
+  thread Emailthread? @relation("Emailmessage_Emailthread_1", fields: [threadId], references: [id])
+  @@map("common_email_message")
+}
+
+/// Model for storing email threads.
+model Emailthread {
+  id Int @id @default(autoincrement())
+  key String?
+  globalId String
+  startedInternal Boolean
+  created DateTime
+  updated DateTime
+  emailmessage_threads Emailmessage[] @relation("Emailmessage_Emailthread_1")
+  @@map("common_email_thread")
+}
+
+/// A Company object represents an external company.
+model Company {
+  id Int @id @default(autoincrement())
+  name String
+  description String?
+  website String?
+  phone String?
+  email String?
+  contact String?
+  link String?
+  active Boolean
+  isCustomer Boolean
+  isSupplier Boolean
+  isManufacturer Boolean
+  currency String?
+  taxId String?
+  contact_companys Contact[] @relation("Contact_Company_1")
+  address_companys Address[] @relation("Address_Company_1")
+  manufacturerpart_manufacturers Manufacturerpart[] @relation("Manufacturerpart_Company_1")
+  supplierpart_suppliers Supplierpart[] @relation("Supplierpart_Company_1")
+  purchaseorder_suppliers Purchaseorder[] @relation("Purchaseorder_Company_1")
+  salesorder_customers Salesorder[] @relation("Salesorder_Company_1")
+  returnorder_customers Returnorder[] @relation("Returnorder_Company_1")
+  stockitem_customers Stockitem[] @relation("Stockitem_Company_1")
+  @@map("company_company")
+}
+
+/// A Contact represents a person who works at a particular company. A Company may have zero or more associated Contact objects.
+model Contact {
+  id Int @id @default(autoincrement())
+  name String
+  phone String?
+  email String?
+  role String?
+  companyId Int
+  company Company @relation("Contact_Company_1", fields: [companyId], references: [id])
+  order_contacts Order[] @relation("Order_Contact_1")
+  @@map("company_contact")
+}
+
+/// An address represents a physical location where the company is located. It is possible for a company to have multiple locations.
+model Address {
+  id Int @id @default(autoincrement())
+  title String
+  primary Boolean
+  line1 String?
+  line2 String?
+  postalCode String?
+  postalCity String?
+  province String?
+  country String?
+  shippingNotes String?
+  internalShippingNotes String?
+  link String?
+  companyId Int
+  company Company @relation("Address_Company_1", fields: [companyId], references: [id])
+  order_addresss Order[] @relation("Order_Address_1")
+  salesordershipment_shipmentAddresss Salesordershipment[] @relation("Salesordershipment_Address_1")
+  @@map("company_address")
+}
+
+/// Represents a unique part as provided by a Manufacturer Each ManufacturerPart is identified by a MPN (Manufacturer Part Number) Each ManufacturerPart is also linked to a Part object. A Part may be available from multiple manufacturers.
+model Manufacturerpart {
+  id Int @id @default(autoincrement())
+  mpn String?
+  link String?
+  description String?
+  partId Int
+  part Part @relation("Manufacturerpart_Part_1", fields: [partId], references: [id])
+  manufacturerId Int?
+  manufacturer Company? @relation("Manufacturerpart_Company_1", fields: [manufacturerId], references: [id])
+  supplierpart_manufacturerParts Supplierpart[] @relation("Supplierpart_Manufacturerpart_1")
+  @@map("company_manufacturer_part")
+}
+
+/// Represents a unique part as provided by a Supplier Each SupplierPart is identified by a SKU (Supplier Part Number) Each SupplierPart is also linked to a Part or ManufacturerPart object. A Part may be available from multiple suppliers.
+model Supplierpart {
+  id Int @id @default(autoincrement())
+  sku String
+  active Boolean
+  primary Boolean
+  link String?
+  description String?
+  note String?
+  baseCost Decimal
+  packaging String?
+  packQuantity String?
+  packQuantityNative Decimal?
+  multiple Int
+  available Decimal
+  availabilityUpdated DateTime?
+  partId Int
+  part Part @relation("Supplierpart_Part_1", fields: [partId], references: [id])
+  supplierId Int
+  supplier Company @relation("Supplierpart_Company_1", fields: [supplierId], references: [id])
+  manufacturerPartId Int?
+  manufacturerPart Manufacturerpart? @relation("Supplierpart_Manufacturerpart_1", fields: [manufacturerPartId], references: [id])
+  supplierpricebreak_parts Supplierpricebreak[] @relation("Supplierpricebreak_Supplierpart_1")
+  purchaseorderlineitem_parts Purchaseorderlineitem[] @relation("Purchaseorderlineitem_Supplierpart_1")
+  stockitem_supplierParts Stockitem[] @relation("Stockitem_Supplierpart_1")
+  @@map("part_supplierpart")
+}
+
+/// Represents a quantity price break for a SupplierPart.
+model Supplierpricebreak {
+  id Int @id @default(autoincrement())
+  partId Int
+  part Supplierpart @relation("Supplierpricebreak_Supplierpart_1", fields: [partId], references: [id])
+  @@map("part_supplierpricebreak")
+}
+
+/// Database model representing a data import session.
+model Dataimportsession {
+  id Int @id @default(autoincrement())
+  timestamp DateTime
+  dataFile String
+  columns Json?
+  modelType String
+  status Int
+  fieldDefaults Json?
+  fieldOverrides Json?
+  fieldFilters Json?
+  updateRecords Boolean
+  completedRowCountHistory Int?
+  rowCountHistory Int?
+  userId Int?
+  user User? @relation("Dataimportsession_User_1", fields: [userId], references: [id])
+  dataimportcolumnmap_sessions Dataimportcolumnmap[] @relation("Dataimportcolumnmap_Dataimportsession_1")
+  dataimportrow_sessions Dataimportrow[] @relation("Dataimportrow_Dataimportsession_1")
+  @@map("importer_data_import_session")
+}
+
+/// Database model representing a mapping between a file column and serializer field.
+model Dataimportcolumnmap {
+  id Int @id @default(autoincrement())
+  field String
+  column String?
+  lookupField String?
+  sessionId Int
+  session Dataimportsession @relation("Dataimportcolumnmap_Dataimportsession_1", fields: [sessionId], references: [id])
+  @@map("importer_data_import_column_map")
+}
+
+/// Database model representing a single row in a data import session.
+model Dataimportrow {
+  id Int @id @default(autoincrement())
+  rowIndex Int
+  rowData Json?
+  data Json?
+  errors Json?
+  valid Boolean
+  complete Boolean
+  sessionId Int
+  session Dataimportsession @relation("Dataimportrow_Dataimportsession_1", fields: [sessionId], references: [id])
+  @@map("importer_data_import_row")
+}
+
+/// Mixin class which exposes the model instance to plugin validation.
+model Pluginvalidationmixin {
+  id Int @id @default(autoincrement())
+  @@map("InvenTree_plugin_validation_mixin")
+}
+
+/// Model mixin class which adds a JSON metadata field to a model, for use by any (and all) plugins.
+model Metadatamixin {
+  id Int @id @default(autoincrement())
+  metadata Json?
+  @@map("InvenTree_metadata_mixin")
+}
+
+/// A mixin for keeping track of numerical copies of the "reference" field.
+model Referenceindexingmixin {
+  id Int @id @default(autoincrement())
+  referenceInt Int
+  @@map("InvenTree_reference_indexing_mixin")
+}
+
+/// Base class for InvenTree models, which provides some common functionality.
+model Inventreemodel {
+  id Int @id @default(autoincrement())
+  @@map("InvenTree_inven_tree_model")
+}
+
+/// Base class for an InvenTree model which includes a metadata field.
+model Inventreemetadatamodel {
+  id Int @id @default(autoincrement())
+  @@map("InvenTree_inven_tree_metadata_model")
+}
+
+/// Provides an abstracted class for managing parameters.
+model Inventreeparametermixin {
+  id Int @id @default(autoincrement())
+  @@map("InvenTree_inven_tree_parameter_mixin")
+}
+
+/// Provides an abstracted class for managing file attachments.
+model Inventreeattachmentmixin {
+  id Int @id @default(autoincrement())
+  @@map("InvenTree_inven_tree_attachment_mixin")
+}
+
+/// Provides an abstracted self-referencing tree model, based on the MPTTModel class.
+model Inventreetree {
+  id Int @id @default(autoincrement())
+  @@map("InvenTree_inven_tree_tree")
+}
+
+/// Mixin class for adding a 'pathstring' field to a model class.
+model Pathstringmixin {
+  id Int @id @default(autoincrement())
+  name String
+  description String?
+  pathstring String?
+  parentId Int?
+  parent Pathstringmixin? @relation("Pathstringmixin_Pathstringmixin_1", fields: [parentId], references: [id])
+  pathstringmixin_parents Pathstringmixin[] @relation("Pathstringmixin_Pathstringmixin_1")
+  @@map("InvenTree_path_string_mixin")
+}
+
+/// A mixin class for adding notes functionality to a model class.
+model Inventreenotesmixin {
+  id Int @id @default(autoincrement())
+  notes String
+  @@map("InvenTree_inven_tree_notes_mixin")
+}
+
+/// A mixin class for adding tag functionality to a model class.
+model Inventreetagsmixin {
+  id Int @id @default(autoincrement())
+  @@map("InvenTree_inven_tree_tags_mixin")
+}
+
+/// A mixin class for adding barcode functionality to a model class.
+model Inventreebarcodemixin {
+  id Int @id @default(autoincrement())
+  barcodeData String?
+  barcodeHash String?
+  @@map("InvenTree_inven_tree_barcode_mixin")
+}
+
+/// A mixin class for adding image functionality to a model class.
+model Inventreeimagemixin {
+  id Int @id @default(autoincrement())
+  image String?
+  @@map("InvenTree_inven_tree_image_mixin")
+}
+
+/// A Machine objects represents a physical machine.
+model Machineconfig {
+  id Int @id @default(autoincrement())
+  name String
+  machineType String
+  driver String
+  active Boolean
+  machinesetting_machineConfigs Machinesetting[] @relation("Machinesetting_Machineconfig_1")
+  @@map("machine_machine_config")
+}
+
+/// This models represents settings for individual machines.
+model Machinesetting {
+  id Int @id @default(autoincrement())
+  configType String
+  machineConfigId Int
+  machineConfig Machineconfig @relation("Machinesetting_Machineconfig_1", fields: [machineConfigId], references: [id])
+  @@map("machine_machine_setting")
+}
+
+/// Mixin which provides 'total_price' field for an order.
+model Totalpricemixin {
+  id Int @id @default(autoincrement())
+  totalPrice Decimal?
+  orderCurrency String?
+  @@map("order_total_price_mixin")
+}
+
+/// Abstract model for an order.
+model Order {
+  id Int @id @default(autoincrement())
+  description String?
+  link String?
+  startDate DateTime?
+  targetDate DateTime?
+  creationDate DateTime?
+  issueDate DateTime?
+  updatedAt DateTime?
+  projectCodeId Int?
+  projectCode Projectcode? @relation("Order_Projectcode_1", fields: [projectCodeId], references: [id])
+  createdById Int?
+  createdBy User? @relation("Order_User_1", fields: [createdById], references: [id])
+  responsibleId Int?
+  responsible Owner? @relation("Order_Owner_1", fields: [responsibleId], references: [id])
+  contactId Int?
+  contact Contact? @relation("Order_Contact_1", fields: [contactId], references: [id])
+  addressId Int?
+  address Address? @relation("Order_Address_1", fields: [addressId], references: [id])
+  @@map("order_order")
+}
+
+/// A PurchaseOrder represents goods shipped inwards from an external supplier.
+model Purchaseorder {
+  id Int @id @default(autoincrement())
+  reference String
+  status String
+  supplierReference String?
+  completeDate DateTime?
+  supplierId Int?
+  supplier Company? @relation("Purchaseorder_Company_1", fields: [supplierId], references: [id])
+  receivedById Int?
+  receivedBy User? @relation("Purchaseorder_User_1", fields: [receivedById], references: [id])
+  destinationId Int?
+  destination Stocklocation? @relation("Purchaseorder_Stocklocation_1", fields: [destinationId], references: [id])
+  purchaseorderlineitem_orders Purchaseorderlineitem[] @relation("Purchaseorderlineitem_Purchaseorder_1")
+  purchaseorderextraline_orders Purchaseorderextraline[] @relation("Purchaseorderextraline_Purchaseorder_1")
+  stockitem_purchaseOrders Stockitem[] @relation("Stockitem_Purchaseorder_1")
+  @@map("order_purchase_order")
+}
+
+/// A SalesOrder represents a list of goods shipped outwards to a customer.
+model Salesorder {
+  id Int @id @default(autoincrement())
+  reference String
+  status String
+  customerReference String?
+  shipmentDate DateTime?
+  customerId Int?
+  customer Company? @relation("Salesorder_Company_1", fields: [customerId], references: [id])
+  shippedById Int?
+  shippedBy User? @relation("Salesorder_User_1", fields: [shippedById], references: [id])
+  build_salesOrders Build[] @relation("Build_Salesorder_1")
+  salesorderlineitem_orders Salesorderlineitem[] @relation("Salesorderlineitem_Salesorder_1")
+  salesordershipment_orders Salesordershipment[] @relation("Salesordershipment_Salesorder_1")
+  salesorderextraline_orders Salesorderextraline[] @relation("Salesorderextraline_Salesorder_1")
+  stockitem_salesOrders Stockitem[] @relation("Stockitem_Salesorder_1")
+  @@map("order_sales_order")
+}
+
+/// Abstract model for an order line item.
+model Orderlineitem {
+  id Int @id @default(autoincrement())
+  quantity Decimal
+  discount Decimal
+  line String?
+  lineInt Int
+  reference String?
+  notes String?
+  link String?
+  targetDate DateTime?
+  projectCodeId Int?
+  projectCode Projectcode? @relation("Orderlineitem_Projectcode_1", fields: [projectCodeId], references: [id])
+  @@map("order_order_line_item")
+}
+
+/// Abstract Model for a single ExtraLine in a Order.
+model Orderextraline {
+  id Int @id @default(autoincrement())
+  description String?
+  context Json?
+  price Decimal?
+  @@map("order_order_extra_line")
+}
+
+/// Model for a purchase order line item.
+model Purchaseorderlineitem {
+  id Int @id @default(autoincrement())
+  received Decimal
+  purchasePrice Decimal?
+  orderId Int
+  order Purchaseorder @relation("Purchaseorderlineitem_Purchaseorder_1", fields: [orderId], references: [id])
+  partId Int?
+  part Supplierpart? @relation("Purchaseorderlineitem_Supplierpart_1", fields: [partId], references: [id])
+  buildOrderId Int?
+  buildOrder Build? @relation("Purchaseorderlineitem_Build_1", fields: [buildOrderId], references: [id])
+  destinationId Int?
+  destination Stocklocation? @relation("Purchaseorderlineitem_Stocklocation_1", fields: [destinationId], references: [id])
+  @@map("order_purchase_order_line_item")
+}
+
+/// Model for a single ExtraLine in a PurchaseOrder.
+model Purchaseorderextraline {
+  id Int @id @default(autoincrement())
+  orderId Int
+  order Purchaseorder @relation("Purchaseorderextraline_Purchaseorder_1", fields: [orderId], references: [id])
+  @@map("order_purchase_order_extra_line")
+}
+
+/// Model for a single LineItem in a SalesOrder.
+model Salesorderlineitem {
+  id Int @id @default(autoincrement())
+  salePrice Decimal?
+  shipped Decimal
+  orderId Int
+  order Salesorder @relation("Salesorderlineitem_Salesorder_1", fields: [orderId], references: [id])
+  partId Int?
+  part Part? @relation("Salesorderlineitem_Part_1", fields: [partId], references: [id])
+  salesorderallocation_lines Salesorderallocation[] @relation("Salesorderallocation_Salesorderlineitem_1")
+  @@map("order_sales_order_line_item")
+}
+
+/// The SalesOrderShipment model represents a physical shipment made against a SalesOrder.
+model Salesordershipment {
+  id Int @id @default(autoincrement())
+  shipmentDate DateTime?
+  deliveryDate DateTime?
+  reference String
+  trackingNumber String?
+  invoiceNumber String?
+  link String?
+  orderId Int
+  order Salesorder @relation("Salesordershipment_Salesorder_1", fields: [orderId], references: [id])
+  shipmentAddressId Int?
+  shipmentAddress Address? @relation("Salesordershipment_Address_1", fields: [shipmentAddressId], references: [id])
+  checkedById Int?
+  checkedBy User? @relation("Salesordershipment_User_1", fields: [checkedById], references: [id])
+  salesorderallocation_shipments Salesorderallocation[] @relation("Salesorderallocation_Salesordershipment_1")
+  @@map("order_sales_order_shipment")
+}
+
+/// Model for a single ExtraLine in a SalesOrder.
+model Salesorderextraline {
+  id Int @id @default(autoincrement())
+  orderId Int
+  order Salesorder @relation("Salesorderextraline_Salesorder_1", fields: [orderId], references: [id])
+  @@map("order_sales_order_extra_line")
+}
+
+/// This model is used to 'allocate' stock items to a SalesOrder. Items that are "allocated" to a SalesOrder are not yet "attached" to the order, but they will be once the order is fulfilled.
+model Salesorderallocation {
+  id Int @id @default(autoincrement())
+  quantity Decimal
+  lineId Int
+  line Salesorderlineitem @relation("Salesorderallocation_Salesorderlineitem_1", fields: [lineId], references: [id])
+  shipmentId Int?
+  shipment Salesordershipment? @relation("Salesorderallocation_Salesordershipment_1", fields: [shipmentId], references: [id])
+  itemId Int
+  item Stockitem @relation("Salesorderallocation_Stockitem_1", fields: [itemId], references: [id])
+  @@map("order_sales_order_allocation")
+}
+
+/// A ReturnOrder represents goods returned from a customer, e.g. an RMA or warranty.
+model Returnorder {
+  id Int @id @default(autoincrement())
+  reference String
+  status String
+  customerReference String?
+  completeDate DateTime?
+  customerId Int?
+  customer Company? @relation("Returnorder_Company_1", fields: [customerId], references: [id])
+  returnorderlineitem_orders Returnorderlineitem[] @relation("Returnorderlineitem_Returnorder_1")
+  returnorderextraline_orders Returnorderextraline[] @relation("Returnorderextraline_Returnorder_1")
+  @@map("order_return_order")
+}
+
+/// Model for a single LineItem in a ReturnOrder.
+model Returnorderlineitem {
+  id Int @id @default(autoincrement())
+  quantity Decimal
+  receivedDate DateTime?
+  outcome String
+  price Decimal?
+  orderId Int
+  order Returnorder @relation("Returnorderlineitem_Returnorder_1", fields: [orderId], references: [id])
+  itemId Int
+  item Stockitem @relation("Returnorderlineitem_Stockitem_1", fields: [itemId], references: [id])
+  @@map("order_return_order_line_item")
+}
+
+/// Model for a single ExtraLine in a ReturnOrder.
+model Returnorderextraline {
+  id Int @id @default(autoincrement())
+  orderId Int
+  order Returnorder @relation("Returnorderextraline_Returnorder_1", fields: [orderId], references: [id])
+  @@map("order_return_order_extra_line")
+}
+
+/// A Transfer Order represents a request to transfer stock from one location to another. It provides a place to queue and review changes before execution.
+model Transferorder {
+  id Int @id @default(autoincrement())
+  reference String
+  status String
+  consume Boolean
+  completeDate DateTime?
+  takeFromId Int?
+  takeFrom Stocklocation? @relation("Transferorder_Stocklocation_1", fields: [takeFromId], references: [id])
+  destinationId Int?
+  destination Stocklocation? @relation("Transferorder_Stocklocation_2", fields: [destinationId], references: [id])
+  transferorderlineitem_orders Transferorderlineitem[] @relation("Transferorderlineitem_Transferorder_1")
+  @@map("order_transfer_order")
+}
+
+/// Model for a single LineItem in a TransferOrder.
+model Transferorderlineitem {
+  id Int @id @default(autoincrement())
+  transferred Decimal
+  orderId Int
+  order Transferorder @relation("Transferorderlineitem_Transferorder_1", fields: [orderId], references: [id])
+  partId Int?
+  part Part? @relation("Transferorderlineitem_Part_1", fields: [partId], references: [id])
+  transferorderallocation_lines Transferorderallocation[] @relation("Transferorderallocation_Transferorderlineitem_1")
+  @@map("order_transfer_order_line_item")
+}
+
+/// This model is used to 'allocate' stock items to a TransferOrder. Items that are "allocated" to a TransferOrder are not yet "attached" to the order, but they will be once the order is fulfilled.
+model Transferorderallocation {
+  id Int @id @default(autoincrement())
+  quantity Decimal
+  lineId Int
+  line Transferorderlineitem @relation("Transferorderallocation_Transferorderlineitem_1", fields: [lineId], references: [id])
+  itemId Int
+  item Stockitem @relation("Transferorderallocation_Stockitem_1", fields: [itemId], references: [id])
+  @@map("order_transfer_order_allocation")
+}
+
+/// PartCategory provides hierarchical organization of Part objects.
+model Partcategory {
+  id Int @id @default(autoincrement())
+  structural Boolean
+  defaultKeywords String?
+  icon String?
+  defaultLocationId Int?
+  defaultLocation Stocklocation? @relation("Partcategory_Stocklocation_1", fields: [defaultLocationId], references: [id])
+  partcategoryparametertemplate_categorys Partcategoryparametertemplate[] @relation("Partcategoryparametertemplate_Partcategory_1")
+  part_categorys Part[] @relation("Part_Partcategory_1")
+  partcategorystar_categorys Partcategorystar[] @relation("Partcategorystar_Partcategory_1")
+  @@map("part_part_category")
+}
+
+/// A PartCategoryParameterTemplate creates a unique relationship between a PartCategory and a ParameterTemplate.
+model Partcategoryparametertemplate {
+  id Int @id @default(autoincrement())
+  defaultValue String?
+  categoryId Int
+  category Partcategory @relation("Partcategoryparametertemplate_Partcategory_1", fields: [categoryId], references: [id])
+  templateId Int
+  template Parametertemplate @relation("Partcategoryparametertemplate_Parametertemplate_1", fields: [templateId], references: [id])
+  @@map("part_part_category_parameter_template")
+}
+
+/// The Part object represents an abstract part, the 'concept' of an actual entity.
+model Part {
+  id Int @id @default(autoincrement())
+  name String
+  isTemplate Boolean
+  description String?
+  keywords String?
+  ipn String?
+  revision String?
+  link String?
+  defaultExpiry Int
+  minimumStock Decimal
+  maximumStock Decimal
+  units String?
+  assembly Boolean
+  component Boolean
+  trackable Boolean
+  testable Boolean
+  purchaseable Boolean
+  salable Boolean
+  active Boolean
+  locked Boolean
+  virtual Boolean
+  consumable Boolean
+  bomValidated Boolean
+  bomChecksum String?
+  bomCheckedDate DateTime?
+  creationDate DateTime?
+  baseCost Decimal
+  multiple Int
+  variantOfId Int?
+  variantOf Part? @relation("Part_Part_1", fields: [variantOfId], references: [id])
+  categoryId Int?
+  category Partcategory? @relation("Part_Partcategory_1", fields: [categoryId], references: [id])
+  revisionOfId Int?
+  revisionOf Part? @relation("Part_Part_2", fields: [revisionOfId], references: [id])
+  defaultLocationId Int?
+  defaultLocation Stocklocation? @relation("Part_Stocklocation_1", fields: [defaultLocationId], references: [id])
+  bomCheckedById Int?
+  bomCheckedBy User? @relation("Part_User_1", fields: [bomCheckedById], references: [id])
+  creationUserId Int?
+  creationUser User? @relation("Part_User_2", fields: [creationUserId], references: [id])
+  responsibleOwnerId Int?
+  responsibleOwner Owner? @relation("Part_Owner_1", fields: [responsibleOwnerId], references: [id])
+  build_parts Build[] @relation("Build_Part_1")
+  manufacturerpart_parts Manufacturerpart[] @relation("Manufacturerpart_Part_1")
+  supplierpart_parts Supplierpart[] @relation("Supplierpart_Part_1")
+  salesorderlineitem_parts Salesorderlineitem[] @relation("Salesorderlineitem_Part_1")
+  transferorderlineitem_parts Transferorderlineitem[] @relation("Transferorderlineitem_Part_1")
+  part_variantOfs Part[] @relation("Part_Part_1")
+  part_revisionOfs Part[] @relation("Part_Part_2")
+  partpricing_parts Partpricing[] @relation("Partpricing_Part_1")
+  partstocktake_parts Partstocktake[] @relation("Partstocktake_Part_1")
+  partsellpricebreak_parts Partsellpricebreak[] @relation("Partsellpricebreak_Part_1")
+  partinternalpricebreak_parts Partinternalpricebreak[] @relation("Partinternalpricebreak_Part_1")
+  partstar_parts Partstar[] @relation("Partstar_Part_1")
+  parttesttemplate_parts Parttesttemplate[] @relation("Parttesttemplate_Part_1")
+  bomitem_parts Bomitem[] @relation("Bomitem_Part_1")
+  bomitem_subParts Bomitem[] @relation("Bomitem_Part_2")
+  bomitemsubstitute_parts Bomitemsubstitute[] @relation("Bomitemsubstitute_Part_1")
+  partrelated_part1s Partrelated[] @relation("Partrelated_Part_1")
+  partrelated_part2s Partrelated[] @relation("Partrelated_Part_2")
+  stockitem_parts Stockitem[] @relation("Stockitem_Part_1")
+  stockitemtracking_parts Stockitemtracking[] @relation("Stockitemtracking_Part_1")
+  @@map("part_part")
+}
+
+/// Model for caching min/max pricing information for a particular Part.
+model Partpricing {
+  id Int @id @default(autoincrement())
+  currency String
+  scheduledForUpdate Boolean
+  bomCostMin Decimal?
+  bomCostMax Decimal?
+  purchaseCostMin Decimal?
+  purchaseCostMax Decimal?
+  internalCostMin Decimal?
+  internalCostMax Decimal?
+  supplierPriceMin Decimal?
+  supplierPriceMax Decimal?
+  variantCostMin Decimal?
+  variantCostMax Decimal?
+  overrideMin Decimal?
+  overrideMax Decimal?
+  overallMin Decimal?
+  overallMax Decimal?
+  salePriceMin Decimal?
+  salePriceMax Decimal?
+  saleHistoryMin Decimal?
+  saleHistoryMax Decimal?
+  partId Int
+  part Part @relation("Partpricing_Part_1", fields: [partId], references: [id])
+  @@map("part_part_pricing")
+}
+
+/// Model representing a 'stock history' entry for a particular Part.
+model Partstocktake {
+  id Int @id @default(autoincrement())
+  itemCount Int
+  quantity Decimal
+  date DateTime
+  costMin Decimal?
+  costMax Decimal?
+  partId Int
+  part Part @relation("Partstocktake_Part_1", fields: [partId], references: [id])
+  @@map("part_part_stocktake")
+}
+
+/// Represents a price break for selling this part.
+model Partsellpricebreak {
+  id Int @id @default(autoincrement())
+  partId Int
+  part Part @relation("Partsellpricebreak_Part_1", fields: [partId], references: [id])
+  @@map("part_part_sell_price_break")
+}
+
+/// Represents a price break for internally selling this part.
+model Partinternalpricebreak {
+  id Int @id @default(autoincrement())
+  partId Int
+  part Part @relation("Partinternalpricebreak_Part_1", fields: [partId], references: [id])
+  @@map("part_part_internal_price_break")
+}
+
+/// A PartStar object creates a subscription relationship between a User and a Part.
+model Partstar {
+  id Int @id @default(autoincrement())
+  partId Int
+  part Part @relation("Partstar_Part_1", fields: [partId], references: [id])
+  userId Int
+  user User @relation("Partstar_User_1", fields: [userId], references: [id])
+  @@map("part_part_star")
+}
+
+/// A PartCategoryStar creates a subscription relationship between a User and a PartCategory.
+model Partcategorystar {
+  id Int @id @default(autoincrement())
+  categoryId Int
+  category Partcategory @relation("Partcategorystar_Partcategory_1", fields: [categoryId], references: [id])
+  userId Int
+  user User @relation("Partcategorystar_User_1", fields: [userId], references: [id])
+  @@map("part_part_category_star")
+}
+
+/// A PartTestTemplate defines a 'template' for a test which is required to be run against a StockItem (an instance of the Part).
+model Parttesttemplate {
+  id Int @id @default(autoincrement())
+  testName String
+  key String?
+  description String?
+  enabled Boolean
+  required Boolean
+  requiresValue Boolean
+  requiresAttachment Boolean
+  choices String?
+  partId Int
+  part Part @relation("Parttesttemplate_Part_1", fields: [partId], references: [id])
+  stockitemtestresult_templates Stockitemtestresult[] @relation("Stockitemtestresult_Parttesttemplate_1")
+  @@map("part_part_test_template")
+}
+
+/// A BomItem links a part to its component items.
+model Bomitem {
+  id Int @id @default(autoincrement())
+  rawAmount String
+  quantity Decimal
+  optional Boolean
+  consumable Boolean
+  setupQuantity Decimal
+  attrition Decimal
+  roundingMultiple Decimal?
+  pieceCount Int
+  reference String?
+  note String?
+  checksum String?
+  validated Boolean
+  inherited Boolean
+  allowVariants Boolean
+  partId Int
+  part Part @relation("Bomitem_Part_1", fields: [partId], references: [id])
+  subPartId Int
+  subPart Part @relation("Bomitem_Part_2", fields: [subPartId], references: [id])
+  buildline_bomItems Buildline[] @relation("Buildline_Bomitem_1")
+  bomitemsubstitute_bomItems Bomitemsubstitute[] @relation("Bomitemsubstitute_Bomitem_1")
+  @@map("part_bom_item")
+}
+
+/// A BomItemSubstitute provides a specification for alternative parts, which can be used in a bill of materials.
+model Bomitemsubstitute {
+  id Int @id @default(autoincrement())
+  bomItemId Int
+  bomItem Bomitem @relation("Bomitemsubstitute_Bomitem_1", fields: [bomItemId], references: [id])
+  partId Int
+  part Part @relation("Bomitemsubstitute_Part_1", fields: [partId], references: [id])
+  @@map("part_bom_item_substitute")
+}
+
+/// Store and handle related parts (eg. mating connector, crimps, etc.).
+model Partrelated {
+  id Int @id @default(autoincrement())
+  note String?
+  part1Id Int
+  part1 Part @relation("Partrelated_Part_1", fields: [part1Id], references: [id])
+  part2Id Int
+  part2 Part @relation("Partrelated_Part_2", fields: [part2Id], references: [id])
+  @@map("part_part_related")
+}
+
+/// A PluginConfig object holds settings for plugins.
+model Pluginconfig {
+  id Int @id @default(autoincrement())
+  key String
+  name String?
+  packageName String?
+  active Boolean
+  selectionlist_sourcePlugins Selectionlist[] @relation("Selectionlist_Pluginconfig_1")
+  pluginsetting_plugins Pluginsetting[] @relation("Pluginsetting_Pluginconfig_1")
+  pluginusersetting_plugins Pluginusersetting[] @relation("Pluginusersetting_Pluginconfig_1")
+  @@map("plugin_plugin_config")
+}
+
+/// This model represents settings for individual plugins.
+model Pluginsetting {
+  id Int @id @default(autoincrement())
+  pluginId Int
+  plugin Pluginconfig @relation("Pluginsetting_Pluginconfig_1", fields: [pluginId], references: [id])
+  @@map("plugin_plugin_setting")
+}
+
+/// This model represents user-specific settings for individual plugins.
+model Pluginusersetting {
+  id Int @id @default(autoincrement())
+  pluginId Int
+  plugin Pluginconfig @relation("Pluginusersetting_Pluginconfig_1", fields: [pluginId], references: [id])
+  userId Int
+  user User @relation("Pluginusersetting_User_1", fields: [userId], references: [id])
+  @@map("plugin_plugin_user_setting")
+}
+
+/// Base class for reports, labels.
+model Reporttemplatebase {
+  id Int @id @default(autoincrement())
+  name String
+  description String
+  revision Int
+  attachToModel Boolean
+  filenamePattern String
+  enabled Boolean
+  modelType String
+  filters String?
+  @@map("report_report_template_base")
+}
+
+/// Class representing the ReportTemplate database model.
+model Reporttemplate {
+  id Int @id @default(autoincrement())
+  template String
+  pageSize String
+  landscape Boolean
+  merge Boolean
+  @@map("report_report_template")
+}
+
+/// Class representing the LabelTemplate database model.
+model Labeltemplate {
+  id Int @id @default(autoincrement())
+  template String
+  width Float
+  height Float
+  @@map("report_label_template")
+}
+
+/// Report template 'snippet' which can be used to make templates that can then be included in other reports.
+model Reportsnippet {
+  id Int @id @default(autoincrement())
+  snippet String
+  description String
+  @@map("report_report_snippet")
+}
+
+/// Asset file for use in report templates.
+model Reportasset {
+  id Int @id @default(autoincrement())
+  asset String
+  description String
+  @@map("report_report_asset")
+}
+
+/// A type of stock location like Warehouse, room, shelf, drawer.
+model Stocklocationtype {
+  id Int @id @default(autoincrement())
+  name String
+  description String?
+  icon String?
+  stocklocation_locationTypes Stocklocation[] @relation("Stocklocation_Stocklocationtype_1")
+  @@map("stock_stock_location_type")
+}
+
+/// Organization tree for StockItem objects.
+model Stocklocation {
+  id Int @id @default(autoincrement())
+  customIcon String?
+  owner Int?
+  structural Boolean
+  external Boolean
+  locationTypeId Int?
+  locationType Stocklocationtype? @relation("Stocklocation_Stocklocationtype_1", fields: [locationTypeId], references: [id])
+  build_takeFroms Build[] @relation("Build_Stocklocation_1")
+  build_destinations Build[] @relation("Build_Stocklocation_2")
+  purchaseorder_destinations Purchaseorder[] @relation("Purchaseorder_Stocklocation_1")
+  purchaseorderlineitem_destinations Purchaseorderlineitem[] @relation("Purchaseorderlineitem_Stocklocation_1")
+  transferorder_takeFroms Transferorder[] @relation("Transferorder_Stocklocation_1")
+  transferorder_destinations Transferorder[] @relation("Transferorder_Stocklocation_2")
+  partcategory_defaultLocations Partcategory[] @relation("Partcategory_Stocklocation_1")
+  part_defaultLocations Part[] @relation("Part_Stocklocation_1")
+  stockitem_locations Stockitem[] @relation("Stockitem_Stocklocation_1")
+  @@map("stock_stock_location")
+}
+
+/// A StockItem object represents a quantity of physical instances of a part.
+model Stockitem {
+  id Int @id @default(autoincrement())
+  packaging String?
+  serial String?
+  serialInt Int
+  link String?
+  batch String?
+  quantity Decimal
+  isBuilding Boolean
+  expiryDate DateTime?
+  stocktakeDate DateTime?
+  creationDate DateTime?
+  deleteOnDeplete Boolean
+  status String
+  purchasePrice Decimal?
+  owner Int?
+  parentId Int?
+  parent Stockitem? @relation("Stockitem_Stockitem_1", fields: [parentId], references: [id])
+  partId Int
+  part Part @relation("Stockitem_Part_1", fields: [partId], references: [id])
+  supplierPartId Int?
+  supplierPart Supplierpart? @relation("Stockitem_Supplierpart_1", fields: [supplierPartId], references: [id])
+  locationId Int?
+  location Stocklocation? @relation("Stockitem_Stocklocation_1", fields: [locationId], references: [id])
+  belongsToId Int?
+  belongsTo Stockitem? @relation("Stockitem_Stockitem_2", fields: [belongsToId], references: [id])
+  customerId Int?
+  customer Company? @relation("Stockitem_Company_1", fields: [customerId], references: [id])
+  buildId Int?
+  build Build? @relation("Stockitem_Build_1", fields: [buildId], references: [id])
+  consumedById Int?
+  consumedBy Build? @relation("Stockitem_Build_2", fields: [consumedById], references: [id])
+  purchaseOrderId Int?
+  purchaseOrder Purchaseorder? @relation("Stockitem_Purchaseorder_1", fields: [purchaseOrderId], references: [id])
+  salesOrderId Int?
+  salesOrder Salesorder? @relation("Stockitem_Salesorder_1", fields: [salesOrderId], references: [id])
+  stocktakeUserId Int?
+  stocktakeUser User? @relation("Stockitem_User_1", fields: [stocktakeUserId], references: [id])
+  builditem_stockItems Builditem[] @relation("Builditem_Stockitem_1")
+  builditem_installIntos Builditem[] @relation("Builditem_Stockitem_2")
+  salesorderallocation_items Salesorderallocation[] @relation("Salesorderallocation_Stockitem_1")
+  returnorderlineitem_items Returnorderlineitem[] @relation("Returnorderlineitem_Stockitem_1")
+  transferorderallocation_items Transferorderallocation[] @relation("Transferorderallocation_Stockitem_1")
+  stockitem_parents Stockitem[] @relation("Stockitem_Stockitem_1")
+  stockitem_belongsTos Stockitem[] @relation("Stockitem_Stockitem_2")
+  stockitemtracking_items Stockitemtracking[] @relation("Stockitemtracking_Stockitem_1")
+  stockitemtestresult_stockItems Stockitemtestresult[] @relation("Stockitemtestresult_Stockitem_1")
+  @@map("stock_stock_item")
+}
+
+/// Stock tracking entry - used for tracking history of a particular StockItem.
+model Stockitemtracking {
+  id Int @id @default(autoincrement())
+  trackingType Int
+  date DateTime
+  notes String?
+  deltas Json?
+  itemId Int?
+  item Stockitem? @relation("Stockitemtracking_Stockitem_1", fields: [itemId], references: [id])
+  partId Int?
+  part Part? @relation("Stockitemtracking_Part_1", fields: [partId], references: [id])
+  userId Int?
+  user User? @relation("Stockitemtracking_User_1", fields: [userId], references: [id])
+  @@map("stock_stock_item_tracking")
+}
+
+/// A StockItemTestResult records results of custom tests against individual StockItem objects.
+model Stockitemtestresult {
+  id Int @id @default(autoincrement())
+  result Boolean
+  value String?
+  attachment String?
+  notes String?
+  testStation String?
+  startedDatetime DateTime?
+  finishedDatetime DateTime?
+  date DateTime
+  stockItemId Int
+  stockItem Stockitem @relation("Stockitemtestresult_Stockitem_1", fields: [stockItemId], references: [id])
+  templateId Int
+  template Parttesttemplate @relation("Stockitemtestresult_Parttesttemplate_1", fields: [templateId], references: [id])
+  userId Int?
+  user User? @relation("Stockitemtestresult_User_1", fields: [userId], references: [id])
+  @@map("stock_stock_item_test_result")
+}
+
+/// Extends the default token model provided by djangorestframework.authtoken.
+model Apitoken {
+  id Int @id @default(autoincrement())
+  key String
+  name String?
+  expiry DateTime
+  lastSeen DateTime?
+  revoked Boolean
+  userId Int
+  user User @relation("Apitoken_User_1", fields: [userId], references: [id])
+  @@map("users_api_token")
+}
+
+/// A RuleSet is somewhat like a superset of the django permission class, in that in encapsulates a bunch of permissions.
+model Ruleset {
+  id Int @id @default(autoincrement())
+  name String
+  canView Boolean
+  canAdd Boolean
+  canChange Boolean
+  canDelete Boolean
+  groupId Int
+  group Group @relation("Ruleset_Group_1", fields: [groupId], references: [id])
+  @@map("users_rule_set")
+}
+
+/// The Owner class is a proxy for a Group or User instance.
+model Owner {
+  id Int @id @default(autoincrement())
+  ownerId Int?
+  owner Int
+  ownerTypeId Int?
+  ownerType ContentType? @relation("Owner_ContentType_1", fields: [ownerTypeId], references: [id])
+  build_responsibles Build[] @relation("Build_Owner_1")
+  projectcode_responsibles Projectcode[] @relation("Projectcode_Owner_1")
+  order_responsibles Order[] @relation("Order_Owner_1")
+  part_responsibleOwners Part[] @relation("Part_Owner_1")
+  @@map("users_owner")
+}
+
+/// Model to store additional user profile information.
+model Userprofile {
+  id Int @id @default(autoincrement())
+  language String?
+  theme Json?
+  widgets Json?
+  displayname String?
+  position String?
+  status String?
+  location String?
+  active Boolean
+  contact String?
+  type String
+  organisation String?
+  userId Int
+  user User @relation("Userprofile_User_1", fields: [userId], references: [id])
+  primaryGroupId Int?
+  primaryGroup Group? @relation("Userprofile_Group_1", fields: [primaryGroupId], references: [id])
+  @@map("users_user_profile")
+}

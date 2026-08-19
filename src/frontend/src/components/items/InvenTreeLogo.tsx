@@ -5,7 +5,7 @@ import { NavLink } from 'react-router-dom';
 
 import { useShallow } from 'zustand/react/shallow';
 import { useServerApiState } from '../../states/ServerApiState';
-import InvenTreeIcon from './inventree.svg';
+import InvenTreeIcon from './bloom_stock.svg';
 
 export const InvenTreeLogoHomeButton = forwardRef<HTMLDivElement>(
   (props, ref) => {
